@@ -1,0 +1,803 @@
+﻿《《打印》》
+《《print(打印内容)》》
+《《控件被单击》》
+《《function 控件ID.onClick()
+--事件
+end
+
+控件ID.onClick=function()
+--事件
+end》》
+《《控件被长按》》
+《《控件ID.onLongClick=function()
+--事件
+end
+
+function 控件ID.onLongClick()
+--事件
+end》》
+《《控件可视，不可视或隐藏》》
+《《--控件可视
+控件ID.setVisibility(View.VISIBLE)
+--控件不可视
+控件ID.setVisibility(View.INVISIBLE)
+--控件隐藏
+控件ID.setVisibility(View.GONE)》》
+《《提示框》》
+《《import "android.content.DialogInterface"
+local dl=AlertDialog.Builder(activity)
+.setTitle("提示框标题")
+.setMessage("提示框内容")
+.setPositiveButton("按钮标题",DialogInterface
+.OnClickListener{
+onClick=function(v)
+--事件
+end
+})
+.setNegativeButton("按钮标题",nil)
+.create()
+dl.show()》》
+《《读写文件》》
+《《--读文件
+local file=io.input("地址")
+local str=io.read("*a")
+io.close()
+print(str)
+--写文件
+local file=io.output("地址")
+io.write(写入内容)
+io.flush()
+io.close()》》
+《《加载框示例》》
+《《local dl=ProgressDialog.show(activity,nil,'登录中')
+dl.show()
+local a=0
+local tt=Ticker()
+tt.start()
+tt.onTick=function() 
+a=a+1
+if a==3 then
+dl.dismiss()
+tt.stop() 
+end
+end》》
+《《标题栏菜单按钮》》
+《《tittle={"分享","帮助","皮肤","退出"}
+function onCreateOptionsMenu(menu) 
+for k,v in ipairs(tittle) do 
+if tittle[v] then 
+local m=menu.addSubMenu(v) 
+for k,v in ipairs(tittle[v]) do 
+m.add(v) 
+end 
+else 
+local m=menu.add(v) 
+m.setShowAsActionFlags(1) 
+end 
+end 
+end 
+function onMenuItemSelected(id,tittle) 
+if y[tittle.getTitle()] then 
+y[tittle.getTitle()]() 
+end 
+end 
+
+y={}
+y["帮助"]=function() 
+--事件
+end
+
+--菜单
+function onCreateOptionsMenu(menu)
+menu.add("打开").onMenuItemClick=function(a)
+
+end
+menu.add("新建").onMenuItemClick=function(a)
+
+end
+end》》
+《《关闭对话框》》
+《《--将dl.show赋值
+dialog=dl.show()
+--在某按钮点击后关闭这个对话框
+function zc.onClick()
+dialog.dismiss()
+end》》
+《《判断是否有网络》》
+《《local wl=activity.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE).getActiveNetworkInfo(); 
+if wl== nil then
+print("无法连接到服务器")
+end》》
+《《沉浸状态栏》》
+《《--这个需要系统SDK21以上才能用
+if Build.VERSION.SDK_INT >= 21 then
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).setStatusBarColor(0xff4285f4);
+end
+--这个需要系统SDK19以上才能用
+if Build.VERSION.SDK_INT >= 19 then
+activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+end》》
+《《复制文本到剪贴板》》
+《《--先导入包
+import "android.content.*" 
+activity.getSystemService(Context.CLIPBOARD_SERVICE).setText(文本)》》
+《《安卓跳转动画》》
+《《android.R.anim.accelerate_decelerate_interpolator
+android.R.anim.accelerate_interpolator
+android.R.anim.anticipate_interpolator
+android.R.anim.anticipate_overshoot_interpolator
+android.R.anim.bounce_interpolator
+android.R.anim.cycle_interpolator
+android.R.anim.decelerate_interpolatoandroid.R.anim.r
+android.R.anim.fade_in
+android.R.anim.fade_out
+android.R.anim.linear_interpolator
+android.R.anim.overshoot_interpolator
+android.R.anim.slide_in_left
+android.R.anim.slide_out_right》》
+《《TextView文本可选择复制》》
+《《--代码中设置
+t.TextIsSelectable=true
+--布局表中设置
+textIsSelectable=true》》
+《《取随机数》》
+《《math.random(最小值,最大值)》》
+《《延迟》》
+《《--这个会卡进程，配合线程使用
+Thread.sleep(延迟时间)
+--这个不会卡进程
+--500指延迟500毫秒
+task(500‚function()
+--延迟之后执行的事件
+end)》》
+《《定时器》》
+《《--timer定时器
+t=timer(function() 
+--事件
+end,延迟,间隔,初始化)
+--暂停timer定时器
+t.Enable=false
+--启动timer定时器
+t.Enable=true
+
+--Ticker定时器
+ti=Ticker()
+ti.Period=间隔
+ti.onTick=function() 
+--事件
+end
+--启动Ticker定时器
+ti.start()
+--停止Ticker定时器
+ti.stop()》》
+《《获取本地时间》》
+《《--格式的时间
+os.date("%Y-%m-%d %H:%M:%S")
+--本地时间总和
+os.clock()
+《《EditText文本被改变事件
+控件ID.addTextChangedListener{
+onTextChanged=function(s)
+--事件
+end
+}》》
+《《字符串操作》》
+《《--字符串转大写
+string.upper(字符串)
+--字符串转小写
+string.lower(字符串)
+--字符串替换
+string.gsub(字符串,被替换的字符,替换的字符,替换次数)》》
+《《设置控件大小》》
+《《--设置宽度
+linearParams = 控件ID.getLayoutParams()
+linearParams.width =宽度
+控件ID.setLayoutParams(linearParams)
+--同理设置高度
+linearParams = 控件ID.getLayoutParams()
+linearParams.height =高度
+控件ID.setLayoutParams(linearParams)》》
+《《载入窗口传参》》
+《《activity.newActivity("窗口名",{参数})
+
+--渐变动画效果的，中间是安卓跳转动画代码
+activity.newActivity("窗口名",android.R.anim.fade_in,android.R.anim.fade_out,{参数})》》
+《《EditText只能输数字》》
+《《import "android.text.InputType"
+import "android.text.method.DigitsKeyListener"
+控件ID.setInputType(InputType.TYPE_CLASS_NUMBER)
+控件ID.setKeyListener(DigitsKeyListener.getInstance("0123456789"))》》
+《《窗口全屏》》
+《《activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)》》
+《《关闭当前窗口》》
+《《activity.finish()》》
+《《按两次返回键退出》》
+《《参数=0
+function onKeyDown(code,event) 
+if string.find(tostring(event),"KEYCODE_BACK") ~= nil then 
+if 参数+2 > tonumber(os.time()) then 
+activity.finish()
+else
+ Toast.makeText(activity,"再按一次返回键退出" , Toast.LENGTH_SHORT )
+.show()
+参数=tonumber(os.time()) 
+end
+return true 
+end
+end》》
+《《取字符串中间》》
+《《string.match("左测试测试右","左(.-)右")》》
+《《判断文件是否存在》》
+《《--先导入io包
+import "java.io.*"
+file,err=io.open("路径")
+print(err)
+if err==nil then
+print("存在")
+else
+print("不存在")
+end》》
+《《判断文件夹是否存在》》
+《《--先导入io包
+import "java.io.*"
+if File(文件夹路径).isDirectory()then
+print("存在")
+else
+print("不存在")
+end》》
+《《窗口回调事件》》
+《《function onActivityResult()
+--事件
+end》》
+《《隐藏标题栏》》
+《《activity.ActionBar.hide()》》
+《《自定义布局对话框》》
+《《local dl=AlertDialog.Builder(activity)
+.setTitle("自定义布局对话框")
+.setView(loadlayout(layout))
+dl.show()》》
+《《列表下滑到最底事件》》
+《《list.setOnScrollListener{
+onScrollStateChanged=function(l,s)
+if list.getLastVisiblePosition()==list.getCount()-1 then
+--事件
+end
+end}》》
+《《标题栏返回按钮》》
+《《activity.getActionBar().setDisplayHomeAsUpEnabled(true) 》》
+《《列表长按事件》》
+《《ID.setOnItemLongClickListener(AdapterView.OnItemLongClickListener{
+onItemLongClick=function(parent, v, pos,id)
+--事件
+end
+})》》
+《《列表点击事件》》
+《《ID.setOnItemClickListener(AdapterView.OnItemClickListener{
+onItemClick=function(parent, v, pos,id)
+--事件
+end
+})》》
+《《关于V4的圆形下拉刷新》》
+《《--设置下拉刷新监听事件
+swipeRefreshLayout.setOnRefreshListener(this);
+--设置进度条的颜色
+swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLUE, Color.GREEN);
+--设置圆形进度条大小
+swipeRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
+--设置进度条背景颜色
+swipeRefreshLayout.setProgressBackgroundColorSchemeColor(Color.DKGRAY);
+--设置下拉多少距离之后开始刷新数据
+swipeRefreshLayout.setDistanceToTriggerSync(50);》》
+《《活动中的回调》》
+《《function main(...)
+--...是newActivity传递过来的参数。
+print("入口函数",...)
+end
+
+function onCreate()
+print("窗口创建")
+end
+
+function onStart()
+print("活动开始")
+end
+
+function onResume()
+print("返回程序")
+end
+
+function onPause()
+print("活动暂停")
+end
+
+function onStop()
+print("活动停止")
+end
+
+function onDestroy()
+print("程序已退出")
+end
+
+function onResult(name,...)
+--name：返回的活动名称
+--...：返回的参数
+print("返回活动",name,...)
+end
+
+function onCreateOptionsMenu(menu)
+--menu：选项菜单。
+menu.add("菜单")
+end
+
+function onOptionsItemSelected(item)
+--item：选中的菜单项
+print(item.Title)
+end
+
+function onConfigurationChanged(config)
+--config：配置信息
+print("屏幕方向关闭")
+end
+
+function onKeyDown(keycode,event)
+--keycode：键值
+--event：事件
+print("按键按下",keycode)
+end
+
+function onKeyUp(keycode,event)
+--keycode：键值
+--event：事件
+print("按键抬起",keycode)
+end
+
+function onKeyLongPress(keycode,event)
+--keycode：键值
+--event：事件
+print("按键长按",keycode)
+end
+
+function onTouchEvent(event)
+--event：事件
+print("触摸事件",event)
+end》》
+《《对话框Dialog》》
+《《--简单对话框
+AlertDialog.Builder(this).setTitle("标题")
+.setMessage("简单消息框")
+.setPositiveButton("确定",nil)
+.show();
+
+--带有三个按钮的对话框
+AlertDialog.Builder(this) 
+.setTitle("确认")
+.setMessage("确定吗？")
+.setPositiveButton("是",nil)
+.setNegativeButton("否",nil)
+.setNeutralButton("不知道",nil)
+.show();
+
+--带输入框的
+AlertDialog.Builder(this)
+.setTitle("请输入")
+.setIcon(android.R.drawable.ic_dialog_info)
+.setView(EditText(this))
+.setPositiveButton("确定", nil)
+.setNegativeButton("取消", nil)
+.show();
+
+--单选的
+AlertDialog.Builder(this)
+.setTitle("请选择")
+.setIcon(android.R.drawable.ic_dialog_info)
+.setSingleChoiceItems({"选项1","选项2","选项3","选项4"}, 0, 
+DialogInterface.OnClickListener() {
+ onClick(dialog,which) {
+dialog.dismiss();
+ }
+}
+)
+.setNegativeButton("取消", null)
+.show();
+
+--多选的
+AlertDialog.Builder(this)
+.setTitle("多选框")
+.setMultiChoiceItems({"选项1","选项2","选项3","选项4"}, null, null)
+.setPositiveButton("确定", null)
+.setNegativeButton("取消", null)
+.show();
+
+--列表的
+AlertDialog.Builder(this)
+.setTitle("列表框")
+.setItems({"列表项1","列表项2","列表项3"},nil)
+.setNegativeButton("确定",nil)
+.show();
+
+--图片的
+img = ImageView(this);
+img.setImageResource(R.drawable.icon);
+AlertDialog.Builder(this)
+.setTitle("图片框")
+.setView(img)
+.setPositiveButton("确定",nil)
+.show();》》
+《《删除ListView中某项》》
+《《adp.remove(pos)》》
+《《打开某APP》》
+《《--导入包
+import "android.content.*"
+
+intent = Intent();
+componentName = ComponentName("com.androlua","com.androlua.Welcome"); 
+intent.setComponent(componentName); 
+activity.startActivity(intent);》》
+《《设置横屏竖屏》》
+《《--横屏
+activity.setRequestedOrientation(0); 
+--竖屏
+activity.setRequestedOrientation(1); 》》
+《《设置控件图片》》
+《《--设置的图片也可以输入路径
+ID.setImageBitmap(loadbitmap("图片.png"))》》
+《《禁用编辑框》》
+《《--代码中设置
+editText.setFocusable(false);
+--布局表中设置
+Focusable=false;》》
+《《隐藏滑条》》
+《《--横向
+horizontalScrollBarEnabled=false;
+--竖向
+VerticalScrollBarEnabled=false;》》
+《《图片着色》》
+《《--代码中设置
+ID.setColorFilter(0xffff0000)
+--布局表中设置
+ColorFilter="#ffff0000"；》》
+《《获取IMEI号》》
+《《import "android.content.*" 
+--导入包 
+
+imei=activity.getSystemService(Context.TELEPHONY_SERVICE).getDeviceId(); 
+print(imei) 
+
+--别忘了添加权限"READ_PHONE_STATE" 》》
+《《分享文字》》
+《《import "android.content.*" 
+
+text="分享的内容" 
+intent=Intent(Intent.ACTION_SEND); 
+intent.setType("text/plain"); 
+intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); 
+intent.putExtra(Intent.EXTRA_TEXT, text); 
+intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+activity.startActivity(Intent.createChooser(intent,"分享到:")); 》》
+《《发送短信》》
+《《--导入包
+import "android.content.*" 
+import "android.net.*" 
+
+uri = Uri.parse("smsto:15800001234"); 
+intent = Intent(Intent.ACTION_SENDTO, uri); 
+intent.putExtra("sms_body","你好") 
+intent.setAction("android.intent.action.VIEW"); 
+activity.startActivity(intent); 》》
+《《拔号》》
+《《import "android.content.*" 
+import "android.net.*" 
+--导入包 
+uri = Uri.parse("tel:15800001234"); 
+intent = Intent(Intent.ACTION_CALL, uri); 
+intent.setAction("android.intent.action.VIEW"); 
+activity.startActivity(intent); 
+--记得添加打电话权限 》》
+《《安装APK》》
+《《import "android.content.*" 
+import "android.net.*" 
+
+intent = Intent(Intent.ACTION_VIEW); 
+intent.setDataAndType(Uri.parse("file:///sdcard/jc.apk"), "application/vnd.android.package-archive"); 
+intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+activity.startActivity(intent); 》》
+《《振动》》
+《《import "android.content.Context" 
+--导入包 
+vibrator = activity.getSystemService(Context.VIBRATOR_SERVICE) 
+vibrator.vibrate( long{100,800} ,-1) 
+--{等待时间,振动时间,等待时间,振动时间,•••,•••,•••,•••••} 
+--{0,1000,500,1000,500,1000} 
+--别忘了申明权限》》
+《《获取剪贴板内容》》
+《《import"android.content.*"
+--导入包
+a=activity.getSystemService(Context.CLIPBOARD_SERVICE).getText()》》
+《《压缩成ZIP》》
+《《ZipUtil.zip("文件或文件夹路径","压缩到的路径")》》
+《《ZIP解压》》
+《《ZipUtil.unzip("ZIP路径","解压到的路径")
+
+--另一种Java方法
+import "java.io.FileOutputStream"
+import "java.util.zip.ZipFile"
+import "java.io.File"
+
+zipfile = "/sdcard/压缩包.zip"--压缩文件路径和文件名
+sdpath = "/sdcard/文件.lua"--解压后路径和文件名
+zipfilepath = "内容.lua"--需要解压的文件名
+
+function unzip(zippath , outfilepath , filename)
+
+local time=os.clock()
+  task(function(zippath,outfilepath,filename)
+require "import"
+import "java.util.zip.*"
+import "java.io.*"
+local file = File(zippath)
+local outFile = File(outfilepath)
+local zipFile = ZipFile(file)
+local entry = zipFile.getEntry(filename)
+local input = zipFile.getInputStream(entry)
+local output = FileOutputStream(outFile)
+local byte=byte[entry.getSize()]
+local temp=input.read(byte)
+while temp ~= -1 do
+output.write(byte)
+temp=input.read(byte)
+end
+input.close()
+output.close()
+end,zippath,outfilepath,filename,
+function()
+print("解压完成，耗时 "..os.clock()-time.." s")
+end)
+
+end
+
+unzip(zipfile,sdpath,zipfilepath)》》
+《《删除文件夹》》
+《《--shell命令的方法
+os.execute("rm-r 路径")》》
+《《重命名文件夹》》
+《《--shell命令的方法
+os.execute("mv 路径新路径")》》
+《《创建文件夹》》
+《《--shell命令的方法
+os.execute("mkdir 路径")》》
+《《删除文件》》
+《《os.remove("路径")》》
+《《设置标题栏标题》》
+《《--标题
+activity.setTitle('标题')
+--小标题
+activity.getActionBar().setSubtitle('小标题')》》
+《《获取Lua文件的执行路径》》
+《《activity.getLuaDir()》》
+《《获取本应用包名》》
+《《activity.getPackageName()》》
+《《布局设置点击效果》》
+《《--5.0或以上可以实现点击水波纹效果
+--在布局加入：
+
+style="?android:attr/buttonBarButtonStyle";》》
+《《判断某APP是否安装》》
+《《if pcall(function() activity.getPackageManager().getPackageInfo("包名",0) end) then
+print("安装了")
+else
+print("没安装")
+end》》
+《《调用系统下载》》
+《《--导入包
+import "android.content.Context"
+import "android.net.Uri"
+
+downloadManager=activity.getSystemService(Context.DOWNLOAD_SERVICE);
+url=Uri.parse("绝对下载链接");
+request=DownloadManager.Request(url);
+request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE|DownloadManager.Request.NETWORK_WIFI);
+request.setDestinationInExternalPublicDir("目录名，可以是Download","下载的文件名");
+request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+downloadManager.enqueue(request);》》
+《《动画结束回调》》
+《《--导入包
+import "android.view.animation.*"
+import "android.view.animation.Animation$AnimationListener"
+--控件动画
+控件.startAnimation(AlphaAnimation(1,0).setDuration(400).setFillAfter(true).setAnimationListener(AnimationListener{
+onAnimationEnd=function()
+print"动画结束")
+end}))》》
+《《关于侧滑》》
+《《--侧滑布局是 DrawerLayout;
+--关闭侧滑
+ID.closeDrawer(3)
+--打开侧滑
+ID.openDrawer(3)》》
+《《关于输入法影响布局的问题》》
+《《--使弹出的输入法不影响布局
+activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+--使弹出的输入法影响布局
+activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);》》
+《《TextView设置字体样式》》
+《《--首先要导入包
+import "android.graphics.*"
+--设置中划线
+控件id.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG)
+--下划线
+控件id.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG )
+--加粗
+控件id.getPaint().setFakeBoldText(true)
+--斜体
+控件id.getPaint().setTextSkewX(0.2)
+
+--设置TypeFace
+import "android.graphics.Typeface"
+id.getPaint().setTypeface(字体)
+--字体可以为以下
+Typeface.DEFAULT --默认字体
+Typeface.DEFAULT_BOLD --加粗字体
+Typeface.MONOSPACE --monospace字体
+Typeface.SANS_SERIF --sans字体
+Typeface.SERIF --serif字体》》
+《《强制结束自身并清除自身数据》》
+《《 os.execute("pm clear "..activity.getPackageName())》》
+《《递归搜索文件实例》》
+《《require "import"
+
+function find(catalog,name)
+local n=0
+local t=os.clock()
+local ret={}
+require "import"
+import "java.io.File" 
+import "java.lang.String"
+function FindFile(catalog,name)
+local name=tostring(name)
+local ls=catalog.listFiles() or File{}
+for 次数=0,#ls-1 do
+--local 目录=tostring(ls[次数])
+local f=ls[次数]
+if f.isDirectory() then--如果是文件夹则继续匹配
+FindFile(f,name)
+else--如果是文件则
+n=n+1
+if n%1000==0 then
+--print(n,os.clock()-t)
+end
+local nm=f.Name
+if string.find(nm,name) then
+--thread(insert,目录)
+table.insert(ret,nm)
+print(nm)
+end
+end
+luajava.clear(f)
+end
+end
+FindFile(catalog,name)
+print("ok",n,#ret)
+end
+
+import "java.io.File"
+
+catalog=File("sdcard/")
+name=".j?pn?g"
+--task(find,catalog,name,print)
+thread(find,catalog,name)》》
+《《获取ListView垂直坐标》》
+《《function getScrollY()
+c = ls.getChildAt(0);
+local firstVisiblePosition = ls.getFirstVisiblePosition();
+local top = c.getTop();
+return -top + firstVisiblePosition * c.getHeight() ;
+end》》
+《《申请root权限》》
+《《--shell命令的方法
+os.execute("su")》》
+《《传感器》》
+《《传感器 = activity.getSystemService(Context.SENSOR_SERVICE)
+
+local 加速度传感器 = 传感器.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+传感器.registerListener(SensorEventListener({ 
+onSensorChanged=function(event) 
+x轴 = event.values[0]
+y轴 = event.values[1]
+z轴 = event.values[2]
+end,nil}), 加速度传感器, SensorManager.SENSOR_DELAY_NORMAL)
+
+local 光线传感器 = 传感器.getDefaultSensor(Sensor.TYPE_LIGHT)
+传感器.registerListener(SensorEventListener({ 
+onSensorChanged=function(event) 
+光线 = event.values[0]
+end,nil}), 光线传感器, SensorManager.SENSOR_DELAY_NORMAL)
+
+local 距离传感器 = 传感器.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+传感器.registerListener(SensorEventListener({ 
+onSensorChanged=function(event) 
+距离 = event.values[0]
+end,nil}), 距离传感器, SensorManager.SENSOR_DELAY_NORMAL)
+
+local 磁场传感器 = 传感器.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+传感器.registerListener(SensorEventListener({ 
+onSensorChanged=function(event) 
+磁场 = event.values[0]
+end,nil}), 磁场传感器, SensorManager.SENSOR_DELAY_NORMAL)
+
+local 温度传感器 = 传感器.getDefaultSensor(Sensor.TYPE_TEMPERATURE)
+传感器.registerListener(SensorEventListener({ 
+onSensorChanged=function(event) 
+温度 = event.values[0]
+end,nil}), 温度传感器, SensorManager.SENSOR_DELAY_NORMAL)
+
+local 陀螺仪传感器 = 传感器.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+传感器.registerListener(SensorEventListener({ 
+onSensorChanged=function(event) 
+陀螺仪 = event.values[0]
+end,nil}), 陀螺仪传感器, SensorManager.SENSOR_DELAY_NORMAL)
+
+local 重力传感器 = 传感器.getDefaultSensor(Sensor.TYPE_GRAVITY)
+传感器.registerListener(SensorEventListener({ 
+onSensorChanged=function(event) 
+重力 = event.values[0]
+end,nil}), 重力传感器, SensorManager.SENSOR_DELAY_NORMAL)
+
+local 压力传感器 = 传感器.getDefaultSensor(Sensor.TYPE_PRESSURE)
+传感器.registerListener(SensorEventListener({ 
+onSensorChanged=function(event) 
+压力 = event.values[0]
+end,nil}), 压力传感器, SensorManager.SENSOR_DELAY_NORMAL)》》
+《《获取控件宽高》》
+《《--导入包
+import "android.content.Context"
+
+function getwh(view)
+view.measure(View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED),View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED));
+height =view.getMeasuredHeight();
+width =view.getMeasuredWidth();
+return width,height
+end
+
+print(getwh(控件ID))》》
+《《播放音频》》
+《《--导入包
+import "android.media.MediaPlayer"
+
+local 音频播放器=MediaPlayer()
+function 播放音频(路径)
+音频播放器.reset()
+.setDataSource(路径)
+.prepare()
+.start()
+.setOnCompletionListener({
+onCompletion=function()
+print("播放完毕")
+end})
+end》》
+《《控件旋转》》
+《《--Z轴上的旋转角度
+View.getRotation()
+
+--X轴上的旋转角度
+View.getRotationX()
+
+--Y轴上的旋转角度
+View.getRotationY()
+
+--设置Z轴上的旋转角度
+View.setRotation(r)
+
+--设置X轴上的旋转角度
+View.setRotationX(r)
+
+--设置Y轴上的旋转角度
+View.setRotationY(r)
+
+--设置旋转中心点的X坐标
+View.setPivotX(p)
+
+--设置旋转中心点的Y坐标
+View.setPivotX(p)
+
+--设置摄像机的与旋转目标在Z轴上距离
+View.setCameraDistance(d)》》

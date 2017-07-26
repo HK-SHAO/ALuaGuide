@@ -1,0 +1,165 @@
+《《自带Http模块》》
+《《获取内容 get函数
+Http.get(url,cookie,charset,header,callback)
+url 网络请求的链接网址
+cookie 使用的cookie，也就是服务器的身份识别信息
+charset 内容编码
+header 请求头
+callback 请求完成后执行的函数
+
+除了url和callback其他参数都不是必须的
+
+回调函数接受四个参数值分别是
+code 响应代码，2xx表示成功，4xx表示请求错误，5xx表示服务器错误，-1表示出错
+content 内容，如果code是-1，则为出错信息
+cookie 服务器返回的用户身份识别信息
+header 服务器返回的头信息
+
+向服务器发送数据 post函数
+Http.post(url,data,cookie,charset,header,callback)
+除了增加了一个data外，其他参数和get完全相同
+data 向服务器发送的数据
+
+下载文件 download函数
+Http.download(url,path,cookie,header,callback)
+参数中没有编码参数，其他同get，
+path 文件保存路径
+
+需要特别注意一点，只支持同时有127个网络请求，否则会出错
+
+
+Http其实是对Http.HttpTask的封装，Http.HttpTask使用的更加通用和灵活的形式
+参数格式如下
+Http.HttpTask( url, String method, cookie, charset, header,  callback) 
+所有参数都是必选，没有则传入nil
+
+url 请求的网址
+method 请求方法可以是get，post，put，delete等
+cookie 身份验证信息
+charset 内容编码
+header 请求头
+callback 回调函数
+
+该函数返回的是一个HttpTask对象，
+需要调用execute方法才可以执行，
+t=Http.HttpTask(xxx)
+t.execute{data}
+
+注意调用的括号是花括号，内容可以是字符串或者byte数组，
+使用这个形式可以自己封装异步上传函数》》
+
+《《TrafficStats类》》
+《《import "android.net.TrafficStats"
+getMobileRxBytes()  --获取通过Mobile连接收到的字节总数，不包含WiFi  
+getMobileRxPackets()  --获取Mobile连接收到的数据包总数  
+getMobileTxBytes()  --Mobile发送的总字节数  
+getMobileTxPackets()  --Mobile发送的总数据包数  
+getTotalRxBytes()  --获取总的接受字节数，包含Mobile和WiFi等  
+getTotalRxPackets()  --总的接受数据包数，包含Mobile和WiFi等  
+getTotalTxBytes()  --总的发送字节数，包含Mobile和WiFi等  
+getTotalTxPackets()  --发送的总数据包数，包含Mobile和WiFi等   
+getUidRxBytes(int uid)  --获取某个网络UID的接受字节数  
+getUidTxBytes(int uid) --获取某个网络UID的发送字节数   
+--例:TrafficStats.getTotalRxBytes()》》
+
+《《开启关闭WiFi》》
+《《import "android.content.Context"
+wifi = activity.Context.getSystemService(Context.WIFI_SERVICE)
+wifi.setWifiEnabled(true)--关闭则false》》
+
+《《断开网络》》
+《《import "android.content.Context"
+wifi = activity.Context.getSystemService(Context.WIFI_SERVICE)
+wifi.disconnect()》》
+
+
+
+《《WiFi是否打开》》
+《《import "android.content.Context"
+wifi = activity.Context.getSystemService(Context.WIFI_SERVICE)
+wi = wifi.isWifiEnabled()》》
+
+《《WiFi是否连接》》
+《《connManager = activity.getSystemService(Context.CONNECTIVITY_SERVICE)
+    mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+    if tostring(mWifi):find("none)")  then
+    --未连接
+    else
+    --连接
+    end》》
+
+《《数据网络是否连接》》
+《《manager = activity.getSystemService(Context.CONNECTIVITY_SERVICE);  
+gprs = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();  
+if tostring(gprs)== "CONNECTED" then
+print"当前数据网络"
+end》》
+
+
+《《获取WiFi信息》》
+《《import "android.content.Context"
+wifi = activity.Context.getSystemService(Context.WIFI_SERVICE)
+ wifi.getConfiguredNetworks()》》
+
+
+
+《《获取WiFi状态》》
+《《import "android.content.Context"
+wifi = activity.Context.getSystemService(Context.WIFI_SERVICE)
+print(wifi.getWifiState())》》
+
+
+
+
+《《IP地址》》
+《《--查看某网站IP地址
+address=InetAddress.getByName("www.10010.com");
+
+--查看本机IP地址
+address=InetAddress.getLocalHost();
+
+--查看IP地址
+wifi = activity.Context.getSystemService(Context.WIFI_SERVICE).getDhcpInfo()
+string.match(tostring(wifi),"ipaddr(.-)gate")》》
+
+
+《《获取Dns》》
+《《import "android.content.Context"
+
+--获取Dns1
+wifi = activity.Context.getSystemService(Context.WIFI_SERVICE).getDhcpInfo()
+ print(string.match(tostring(wifi),"dns1 (.-) dns2"))
+
+--获取Dns2
+wifi = activity.Context.getSystemService(Context.WIFI_SERVICE).getDhcpInfo()
+ dns2 = string.match(tostring(wifi),"dns2 (.-) D")》》
+
+
+
+
+《《获取网络名称》》
+《《wifiManager=activity.Context.getSystemService(Context.WIFI_SERVICE);
+wifiInfo=wifiManager.getConnectionInfo();
+print(wifiInfo.getSSID())》》
+
+
+《《获取WiFi加密类型》》
+《《wifi = activity.Context.getSystemService(Context.WIFI_SERVICE).getConfiguredNetworks()
+print(string.match(tostring(wifi),[[KeyMgmt: (.-) P]]))》》
+
+
+《《获取网络信号强度》》
+《《wifiManager=activity.Context.getSystemService(Context.WIFI_SERVICE);
+wifiInfo=wifiManager.getConnectionInfo();
+print(wifiInfo.getRssi())》》
+
+《《获取SSID是否被隐藏》》
+《《wifiManager=activity.Context.getSystemService(Context.WIFI_SERVICE);
+wifiInfo=wifiManager.getConnectionInfo();
+print(wifiInfo.getHiddenSSID())》》
+
+
+《《获取Mac地址》》
+《《wifiManager=activity.Context.getSystemService(Context.WIFI_SERVICE);
+wifiInfo=wifiManager.getConnectionInfo();
+print( wifiInfo.getMacAddress())》》

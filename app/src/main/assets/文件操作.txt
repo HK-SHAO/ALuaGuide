@@ -1,0 +1,171 @@
+《《创建新文件》》
+《《--使用File类
+import "java.io.File"--导入File类
+File(文件路径).createNewFile()
+
+--使用io库
+io.open("/sdcard/aaaa", 'w')》》
+
+《《创建新文件夹》》
+《《--使用File类
+import "java.io.File"--导入File类
+File(文件夹路径).mkdir()
+
+--创建多级文件夹
+File(文件夹路径).mkdirs()
+
+--shell
+os.execute('mkdir '..文件夹路径)》》
+
+《《重命名与移动文件》》
+《《--Shell
+os.execute("mv "..oldname.." "..newname)
+
+--os
+os.rename (oldname, newname)
+
+--File
+import "java.io.File"--导入File类
+File(旧).renameTo(File(新))》》
+
+
+《《追加更新文件》》
+《《io.open(文件路径,"a+"):write("更新的内容"):close()》》
+
+
+
+《《更新文件》》
+《《io.open(文件路径,"w+"):write("更新的内容"):close()》》
+
+《《写入文件》》
+《《io.open(文件路径,"w"):write("内容"):close()》》
+
+《《写入文件(自动创建父文件夹)》》
+《《function 写入文件(路径,内容)
+  import "java.io.File"
+  f=File(tostring(File(tostring(路径)).getParentFile())).mkdirs()
+  io.open(tostring(路径),"w"):write(tostring(内容)):close()
+end》》
+
+
+
+《《读取文件》》
+《《io.open(文件路径):read("*a")》》
+
+
+
+《《按行读取文件》》
+《《for c in io.lines(文件路径) do
+print(c)
+end》》
+
+
+
+《《删除文件或文件夹》》
+《《--使用File类
+import "java.io.File"--导入File类
+File(文件路径).delete()
+--使用os方法
+os.remove (filename)》》
+
+
+《《复制文件》》
+《《LuaUtil.copyDir(from,to)》》
+
+
+
+
+《《递归删除文件夹或文件》》
+《《--使用LuaUtil辅助库
+LuaUtil.rmDir(路径)
+
+--使用Shell
+os.execute("rm -r "..路径)》》
+
+
+《《替换文件内字符串》》
+《《function 替换文件字符串(路径,要替换的字符串,替换成的字符串)
+if 路径 then
+  路径=tostring(路径)
+  内容=io.open(路径):read("*a")
+  io.open(路径,"w+"):write(tostring(内容:gsub(要替换的字符串,替换成的字符串))):close()
+else
+return false
+end
+end》》
+《《获取文件列表》》
+《《import("java.io.File")
+luajava.astable(File(文件夹路径).listFiles())》》
+
+
+《《获取文件名称》》
+《《import "java.io.File"--导入File类
+File(路径).getName()》》
+
+《《获取文件大小》》
+《《function GetFileSize(path)
+  import "java.io.File"
+  import "android.text.format.Formatter"
+  size=File(tostring(path)).length()
+  Sizes=Formatter.formatFileSize(activity, size)
+  return Sizes
+end》》
+
+
+《《获取文件或文件夹最后修改时间》》
+《《function GetFilelastTime(path)
+  f = File(path); 
+  cal = Calendar.getInstance();
+  time = f.lastModified()
+  cal.setTimeInMillis(time); 
+  return cal.getTime().toLocaleString()
+end》》
+
+
+《《获取文件字节》》
+《《import "java.io.File"--导入File类
+File(路径).length()》》
+
+
+《《获取文件父文件夹路径》》
+《《import "java.io.File"--导入File类
+File(path).getParentFile()》》
+
+《《获取文件Mime类型》》
+《《function GetFileMime(name)
+import "android.webkit.MimeTypeMap"
+ExtensionName=tostring(name):match("%.(.+)")
+Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+return tostring(Mime)
+end
+print(GetFileMime("/sdcard/a.png"))》》
+
+
+《《判断路径是不是文件夹》》
+《《import "java.io.File"--导入File类
+File(路径).isDirectory()
+--也可用来判断文件夹存不存在》》
+
+
+
+《《判断路径是不是文件》》
+《《import "java.io.File"--导入File类
+File(路径).isFile()
+--也可用来判断文件存不存在》》
+
+
+《《判断文件或文件夹存不存在》》
+《《import "java.io.File"--导入File类
+File(路径).exists()
+
+--使用io
+function file_exists(path)
+local f=io.open(path,'r')
+if f~=nil then io.close(f) return true else return false end
+end》》
+
+
+
+《《判断是不是系统隐藏文件》》
+《《import "java.io.File"--导入File类
+File(路径).isHidden()》》

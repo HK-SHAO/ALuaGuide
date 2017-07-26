@@ -1,0 +1,240 @@
+《《Intent类介绍》》
+《《Intent（意图）主要是解决Android应用的各项组件之间的通讯。
+Intent负责对应用中一次操作的动作、动作涉及数据、附加数据进行描述.
+Android则根据此Intent的描述，负责找到对应的组件，将 Intent传递给调用的组件，并完成组件的调用。
+
+因此，Intent在这里起着一个媒体中介的作用
+专门提供组件互相调用的相关信息
+实现调用者与被调用者之间的解耦。
+
+例如，在一个联系人维护的应用中，当我们在一个联系人列表屏幕(假设对应的Activity为listActivity)上
+点击某个联系人后，希望能够跳出此联系人的详细信息屏幕(假设对应的Activity为detailActivity)
+为了实现这个目的，listActivity需要构造一个 Intent
+这个Intent用于告诉系统，我们要做“查看”动作，此动作对应的查看对象是“某联系人”
+然后调用startActivity (Intent intent)，将构造的Intent传入
+
+系统会根据此Intent中的描述到ManiFest中找到满足此Intent要求的Activity，系统会调用找到的 Activity，即为detailActivity，最终传入Intent，detailActivity则会根据此Intent中的描述，执行相应的操作。》》
+
+
+《《调用浏览器搜索关键字》》
+《《import "android.content.Intent"
+import "android.app.SearchManager"
+intent =  Intent()
+intent.setAction(Intent.ACTION_WEB_SEARCH)
+intent.putExtra(SearchManager.QUERY,"Alua开发手册")    
+activity.startActivity(intent)》》
+
+
+《《调用浏览器打开网页》》
+《《import "android.content.Intent"
+import "android.net.Uri"
+url="http://www.androlua.cn"
+viewIntent =  Intent("android.intent.action.VIEW",Uri.parse(url))
+activity.startActivity(viewIntent)》》
+
+
+
+
+《《打开其它程序》》
+《《packageName=程序包名
+import "android.content.Intent"
+import "android.content.pm.PackageManager"
+manager = activity.getPackageManager()
+open = manager.getLaunchIntentForPackage(packageName)
+this.startActivity(open)》》
+
+
+《《安装其它程序》》
+《《import "android.content.Intent"
+import "android.net.Uri"
+intent = Intent(Intent.ACTION_VIEW)
+安装包路径="/sdcard/a.apk"
+intent.setDataAndType(Uri.parse("file://"..安装包路径), "application/vnd.android.package-archive") 
+intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+activity.startActivity(intent)》》
+
+
+《《卸载其它程序》》
+《《import "android.net.Uri"
+import "android.content.Intent"
+包名="com.huluxia.gametools"
+uri = Uri.parse("package:"..包名)
+intent =  Intent(Intent.ACTION_DELETE,uri)
+activity.startActivity(intent)》》
+
+《《播放Mp4》》
+《《import "android.content.Intent"
+import "android.net.Uri"
+intent =  Intent(Intent.ACTION_VIEW)
+uri = Uri.parse("file:///sdcard/a.mp4") 
+intent.setDataAndType(uri, "video/mp4")
+activity.startActivity(intent)》》
+
+《《播放Mp3》》
+《《import "android.content.Intent"
+import "android.net.Uri"
+intent =  Intent(Intent.ACTION_VIEW)
+uri = Uri.parse("file:///sdcard/song.mp3")
+intent.setDataAndType(uri, "audio/mp3")
+this.startActivity(intent)》》
+
+《《搜索应用》》
+《《import "android.content.Intent"
+import "android.net.Uri"
+intent = Intent("android.intent.action.VIEW")
+intent .setData(Uri.parse( "market://details?id="..activity.getPackageName()))
+this.startActivity(intent)》》
+
+
+《《调用系统设置》》
+《《import "android.content.Intent"
+import "android.provider.Settings"
+intent = Intent(android.provider.Settings.ACTION_SETTINGS)
+this.startActivity(intent)
+
+字段列表:
+ACTION_SETTINGS	系统设置
+CTION_APN_SETTINGS APN设置
+ACTION_LOCATION_SOURCE_SETTINGS 位置和访问信息
+ACTION_WIRELESS_SETTINGS 网络设置
+ACTION_AIRPLANE_MODE_SETTINGS 无线和网络热点设置
+ACTION_SECURITY_SETTINGS 位置和安全设置
+ACTION_WIFI_SETTINGS 无线网WIFI设置
+ACTION_WIFI_IP_SETTINGS 无线网IP设置
+ACTION_BLUETOOTH_SETTINGS 蓝牙设置
+ACTION_DATE_SETTINGS 时间和日期设置
+ACTION_SOUND_SETTINGS 声音设置
+ACTION_DISPLAY_SETTINGS 显示设置——字体大小等
+ACTION_LOCALE_SETTINGS 语言设置
+ACTION_INPUT_METHOD_SETTINGS 输入法设置
+ACTION_USER_DICTIONARY_SETTINGS 用户词典
+ACTION_APPLICATION_SETTINGS 应用程序设置
+ACTION_APPLICATION_DEVELOPMENT_SETTINGS 应用程序设置
+ACTION_QUICK_LAUNCH_SETTINGS 快速启动设置
+ACTION_MANAGE_APPLICATIONS_SETTINGS 已下载（安装）软件列表
+ACTION_SYNC_SETTINGS 应用程序数据同步设置
+ACTION_NETWORK_OPERATOR_SETTINGS 可用网络搜索
+ACTION_DATA_ROAMING_SETTINGS 移动网络设置
+ACTION_INTERNAL_STORAGE_SETTINGS 手机存储设置
+》》
+
+
+《《调用系统打开文件》》
+《《function OpenFile(path)
+  import "android.webkit.MimeTypeMap"
+  import "android.content.Intent"
+  import "android.net.Uri"
+  import "java.io.File"
+  FileName=tostring(File(path).Name)
+  ExtensionName=FileName:match("%.(.+)")
+  Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+  if Mime then 
+    intent = Intent()
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.setAction(Intent.ACTION_VIEW); 
+    intent.setDataAndType(Uri.fromFile(File(path)), Mime); 
+    activity.startActivity(intent)
+return true
+  else
+    return false
+  end
+end
+OpenFile(文件路径)》》
+
+
+《《调用图库选择图片》》
+《《import "android.content.Intent"
+  local intent= Intent(Intent.ACTION_PICK)
+  intent.setType("image/*")
+  this.startActivityForResult(intent, 1)
+-------
+
+--回调
+function onActivityResult(requestCode,resultCode,intent)
+  if intent then
+    local cursor =this.getContentResolver ().query(intent.getData(), nil, nil, nil, nil)
+    cursor.moveToFirst()
+import "android.provider.MediaStore"
+    local idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+    fileSrc = cursor.getString(idx)
+    bit=nil
+    --fileSrc回调路径路径
+import "android.graphics.BitmapFactory"
+    bit =BitmapFactory.decodeFile(fileSrc)
+  --  iv.setImageBitmap(bit)
+  end
+end--nirenr》》
+
+《《调用文件管理器选择文件》》
+《《function ChooseFile()
+import "android.content.Intent"
+import "android.net.Uri"
+import "java.net.URLDecoder"
+import "java.io.File"
+intent = Intent(Intent.ACTION_GET_CONTENT)
+intent.setType("*/");
+intent.addCategory(Intent.CATEGORY_OPENABLE)
+activity.startActivityForResult(intent,1);
+function onActivityResult(requestCode,resultCode,data)
+  if resultCode == Activity.RESULT_OK then
+  local str = data.getData().toString()
+  local decodeStr = URLDecoder.decode(str,"UTF-8")
+  print(decodeStr)
+  end
+end
+end
+
+ChooseFile()》》
+
+
+《《分享文件》》
+《《function Sharing(path)
+  import "android.webkit.MimeTypeMap"
+  import "android.content.Intent"
+  import "android.net.Uri"
+  import "java.io.File"
+  FileName=tostring(File(path).Name)
+  ExtensionName=FileName:match("%.(.+)")
+  Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+  intent = Intent()
+  intent.setAction(Intent.ACTION_SEND)
+  intent.setType(Mime)
+  file = File(path)
+  uri = Uri.fromFile(file)
+  intent.putExtra(Intent.EXTRA_STREAM,uri)
+  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+  activity.startActivity(Intent.createChooser(intent, "分享到:"))
+end
+
+Sharing(文件路径)》》
+
+
+
+《《发送短信》》
+《《import "android.net.Uri"
+import "android.content.Intent"
+uri = Uri.parse("smsto:10010")
+intent = Intent(Intent.ACTION_SENDTO, uri)
+intent.putExtra("sms_body","cxll") 
+intent.setAction("android.intent.action.VIEW")
+activity.startActivity(intent)》》
+
+《《发送彩信》》
+《《import "android.net.Uri"
+import "android.content.Intent"
+uri=Uri.parse("file:///sdcard/a.png") --图片路径
+intent= Intent();
+intent.setAction(Intent.ACTION_SEND);
+intent.putExtra("address",mobile) --邮件地址
+intent.putExtra("sms_body",content) --邮件内容
+intent.putExtra(Intent.EXTRA_STREAM,uri)
+intent.setType("image/png") --设置类型
+this.startActivity(intent)》》
+
+《《拨打电话》》
+《《import "android.net.Uri"
+import "android.content.Intent"
+uri = Uri.parse("tel:10010")
+intent = Intent(Intent.ACTION_CALL, uri)
+intent.setAction("android.intent.action.VIEW")
+activity.startActivity(intent)》》

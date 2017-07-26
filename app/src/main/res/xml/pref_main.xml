@@ -1,0 +1,64 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="常规">
+        <SwitchPreference
+            android:key="nightMode"
+            android:summary="在黑暗环境下保护视力"
+            android:title="夜间模式" />
+
+        <SwitchPreference
+            android:enabled="false"
+            android:summary="App在每次启动时刷新数据"
+            android:title="自动刷新" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="编辑器">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="autoFormat"
+            android:summary="打开编辑器后自动格式化代码"
+            android:title="自动格式化代码" />
+        <SwitchPreference
+            android:enabled="false"
+            android:summary="编辑器是否仅用作显示"
+            android:title="可否编辑" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="heightLight"
+            android:summary="将Lua代码进行高亮处理"
+            android:title="代码高亮" />
+        <EditTextPreference
+            android:defaultValue="10"
+            android:inputType="number"
+            android:key="delay"
+            android:summary="文本改变后进行高亮的延迟时间"
+            android:title="高亮延迟时间" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="关于">
+        <Preference
+            android:summary="版本号：0.5  开发者：烧风  QQ：2063597709\n\n因老版本内容太少，兼容性差，并且因服务器出现问题而无法使用，于是时隔了近一年的我，在暑假拥有了自己的电脑后，开始了Android Studio的第一个项目——ALua手册重生版，以此纪念我第一个上架的App，从Lua语言，AndroLua开始的Android开发旅程。"
+            android:title="ALua助手-重生版" />
+    </PreferenceCategory>
+
+    <Preference
+        android:summary="排名不分前后"
+        android:title="感谢以下的支持" />
+    <Preference
+        android:summary="提供手册内容"
+        android:title="寒歌" />
+
+    <Preference
+        android:summary="提供服务器支持"
+        android:title="Lucky Nine" />
+
+    <Preference
+        android:summary="提供手册内容"
+        android:title="nirenr" />
+
+    <Preference
+        android:summary="使用了其网站中的Lua教程和Lua参考手册。使用并未经其允许，如有侵犯联系立刻删除"
+        android:title="菜鸟教程" />
+
+</PreferenceScreen>

@@ -1,0 +1,667 @@
+﻿《《初识AndroLua》》
+《《AndroLua可以在安卓平台上的用 Lua 开发安卓程序，不仅支持调用Java API，而且支持编写安卓界面程序，还可以将自己写的 Lua 程序打包成apk安装文件安装。Lua 语言的简单使没有任何编程经验的用户也能在短时间内开发出安卓程序，因此，在学习AndroLua之前我们需要先学习 Lua 语言。》》
+《《Lua简介》》
+《《Lua 是一种轻量小巧的脚本语言，用标准C语言编写并以源代码形式开放， 其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。
+Lua 是巴西里约热内卢天主教大学（Pontifical Catholic University of Rio de Janeiro）里的一个研究小组，由Roberto Ierusalimschy、Waldemar Celes 和 Luiz Henrique de Figueiredo所组成并于1993年开发。
+那么我们废话不多说来写第一个 Lua 程序吧！》》
+《《第一个 Lua 程序》》
+《《接下来我们使用 Lua 来输出"Hello World"
+
+print("Hello World")
+
+运行后，会在屏幕上显示 Hello world》》
+《《注释》》
+《《单行注释:
+两个减号是单行注释:
+
+--注释》》
+《《标示符》》
+《《Lua 表示符用于定义一个变量，函数获取其他用户定义的项。标示符以一个字母 A 到 Z 或 a 到 z 或下划线 _ 开头后加上0个或多个字母，下划线，数字（0到9）。
+最好不要使用下划线加大写字母的标示符，因为Lua的保留字也是这样的。
+Lua 不允许使用特殊字符如 @, $, 和 % 来定义标示符。 Lua 是一个区分大小写的编程语言。因此在 Lua 中 W3c 与 w3c 是两个不同的标示符。以下列出了一些正确的标示符：
+
+mohd         zara      abc     move_name  
+  
+myname50     _temp     j       a23b9  》》
+《《关键词》》
+《《以下列出了 Lua 的保留关键字。保留关键字不能作为常量或变量或其他用户自定义标示符：
+
+and      break	     do      else    elseif   end       false
+for      function  if      in      local    nil	       not
+or	      repeat    return	 then    true     until     while			
+
+一般约定，以下划线开头连接一串大写字母的名字（比如 _VERSION）被保留用于 Lua 内部全局变量。》》
+《《全局变量》》
+《《在默认情况下，变量总是认为是全局的。
+全局变量不需要声明，给一个变量赋值后即创建了这个全局变量，访问一个没有初始化的全局变量也不会出错，只不过得到的结果是：nil。
+
+print(b)
+--nil
+b=10
+print(b)
+--10
+
+如果你想删除一个全局变量，只需要将变量赋值为nil。
+
+b = 2
+b = nil
+print(b)
+--nil
+
+这样变量b就好像从没被使用过一样。换句话说, 当且仅当一个变量不等于nil时，这个变量即存在。》》
+《《Lua 数据类型》》
+《《Lua是动态类型语言，变量不要类型定义,只需要为变量赋值。 值可以存储在变量中，作为参数传递或结果返回。
+Lua中有8个基本类型分别为：
+
+nil、boolean、number、string、userdata、function、thread和table。
+
+我们可以使用type函数测试给定变量或者值的类型：
+
+print(type("Hello world"))
+--string
+print(type(10.4*3))
+--number
+print(type(print))
+--function
+print(type(type))
+--function
+print(type(true))
+--boolean
+print(type(nil))
+--nil
+print(type(type(X)))
+--string》》
+《《nil（空）》》
+《《nil 类型表示一种没有任何有效值，它只有一个值 -- nil，例如打印一个没有赋值的变量，便会输出一个 nil 值：
+
+print(type(a))
+--nil
+
+对于全局变量和 table，nil 还有一个"删除"作用，给全局变量或者 table 表里的变量赋一个 nil 值，等同于把它们删掉。》》
+《《boolean（布尔）》》
+《《boolean 类型只有两个可选值：true（真） 和 false（假），Lua 把 false 和 nil 看作是"假"，其他的都为"真"。》》
+《《number（数字）》》
+《《Lua 默认只有一种 number 类型 -- double（双精度）类型（默认类型可以修改 luaconf.h 里的定义），以下几种写法都被看作是 number 类型。》》
+《《string（字符串）》》
+《《字符串由一对双引号或单引号来表示。
+
+string1 = "this is string1"
+string2 = 'this is string2'
+
+在对一个数字字符串上进行算术操作时，Lua 会尝试将这个数字字符串转成一个数字，字符串连接使用的是 ..如：
+
+print("a" .. 'b')
+--ab
+print(157 .. 428)
+--157428
+
+使用 # 来计算字符串的长度，放在字符串前面，如下实例：
+
+len = "www.androlua.com"
+print(#len)
+--16》》
+《《table（表）》》
+《《在 Lua 里，table 的创建是通过"构造表达式"来完成，最简单构造表达式是{}，用来创建一个空表。也可以在表里添加一些数据，直接初始化表:
+
+-- 创建一个空的 table
+local tbl1 = {}
+ 
+-- 直接初始表
+local tbl2 = {"apple", "pear", "orange", "grape"}
+
+Lua 中的表（table）其实是一个"关联数组"（associative arrays），数组的索引可以是数字或者是字符串。不同于其他语言的数组把 0 作为数组的初始索引，在 Lua 里表的默认初始索引一般以 1 开始。table 不会固定长度大小，有新数据添加时 table 长度会自动增长，没初始的 table 都是 nil。》》
+《《function（函数）》》
+《《在 Lua 中，函数是被看作是"第一类值（First-Class Value）"，函数可以存在变量里:
+
+function factorial1(n)
+    if n == 0 then
+        return 1
+    else
+        return n * factorial1(n - 1)
+    end
+end
+print(factorial1(5))
+factorial2 = factorial1
+print(factorial2(5))
+
+function 可以以匿名函数（anonymous function）的方式通过参数传递:
+
+function anonymous(tab, fun)
+    for k, v in pairs(tab) do
+        print(fun(k, v))
+    end
+end
+tab = { key1 = "val1", key2 = "val2" }
+anonymous(tab, function(key, val)
+    return key .. " = " .. val
+end)》》
+《《thread（线程）》》
+《《在 Lua 里，最主要的线程是协同程序（coroutine）。它跟线程（thread）差不多，拥有自己独立的栈、局部变量和指令指针，可以跟其他协同程序共享全局变量和其他大部分东西。
+线程跟协程的区别：线程可以同时多个运行，而协程任意时刻只能运行一个，并且处于运行状态的协程只有被挂起（suspend）时才会暂停。》》
+《《userdata（自定义类型）》》
+《《userdata 是一种用户自定义数据，用于表示一种由应用程序或 C/C++ 语言库所创建的类型，可以将任意 C/C++ 的任意数据类型的数据（通常是 struct 和 指针）存储到 Lua 变量中调用。》》
+《《Lua 变量》》
+《《变量在使用前，必须在代码中进行声明，即创建该变量。
+编译程序执行代码之前编译器需要知道如何给语句变量开辟存储区，用于存储变量的值。
+Lua 变量有三种类型：全局变量、局部变量、表中的域。
+Lua 中的变量全是全局变量，那怕是语句块或是函数里，除非用 local 显示声明为局部变量。
+局部变量的作用域为从声明位置开始到所在语句块结束。
+变量的默认值均为 nil。
+
+a = 5               -- 全局变量
+local b = 5         -- 局部变量
+
+function joke()
+    c = 5           -- 全局变量
+    local d = 6     -- 局部变量
+end》》
+《《赋值语句》》
+《《赋值是改变一个变量的值和改变表域的最基本的方法。
+
+a = "hello" .. "world"
+t.n = t.n + 1
+
+Lua可以对多个变量同时赋值，变量列表和值列表的各个元素用逗号分开，赋值语句右边的值会依次赋给左边的变量。
+
+a, b = 10, 2*x       <-->       a=10; b=2*x
+
+遇到赋值语句Lua会先计算右边所有的值然后再执行赋值操作，所以我们可以这样进行交换变量的值：
+
+x, y = y, x                     -- swap 'x' for 'y'
+a[i], a[j] = a[j], a[i]         -- swap 'a[i]' for 'a[j]'
+
+当变量个数和值的个数不一致时，Lua会一直以变量个数为基础采取以下策略：
+a. 变量个数 > 值的个数             按变量个数补足nil
+b. 变量个数 < 值的个数             多余的值会被忽略
+例如：
+
+a, b, c = 0, 1
+print(a,b,c)             --> 0   1   nil
+ 
+a, b = a+1, b+1, b+2     -- value of b+2 is ignored
+print(a,b)               --> 1   2
+ 
+a, b, c = 0
+print(a,b,c)             --> 0   nil   nil
+
+上面最后一个例子是一个常见的错误情况，注意：如果要对多个变量赋值必须依次对每个变量赋值。
+
+a, b, c = 0, 0, 0
+print(a,b,c)             --> 0   0   0
+
+多值赋值经常用来交换变量，或将函数调用返回给变量：
+
+a, b = f()
+f()
+
+返回两个值，第一个赋给a，第二个赋给b。
+应该尽可能的使用局部变量，有两个好处：
+1. 避免命名冲突。
+2. 访问局部变量的速度比全局变量更快。》》
+《《索引》》
+《《对 table 的索引使用方括号 []。Lua 也提供了 . 操作。
+
+t[i]
+t.i                 -- 当索引为字符串类型时的一种简化写法
+gettable_event(t,i) -- 采用索引访问本质上是一个类似这样的函数调用
+
+例如：
+
+site = {}
+site["key"] = "www.androlua.cn"
+print(site["key"])
+--www.androlua.cn
+print(site.key)
+--www.androlua.cn》》
+《《Lua 循环》》
+《《很多情况下我们需要做一些有规律性的重复操作，因此在程序中就需要重复执行某些语句。
+一组被重复执行的语句称之为循环体，能否继续重复，决定循环的终止条件。
+循环结构是在一定条件下反复执行某段程序的流程结构，被反复执行的程序被称为循环体。
+循环语句是由循环体及循环的终止条件两部分组成的。
+Lua 语言提供了以下几种循环处理方式：
+
+while 循环
+在条件为 true 时，让程序重复地执行某些语句。执行语句前会先检查条件是否为 true。
+
+for 循环
+重复执行指定语句，重复次数可在 for 语句中控制。
+
+Lua repeat...until
+重复执行循环，直到 指定的条件为真时为止
+
+循环嵌套
+可以在循环内嵌套一个或多个循环语句（while、for、do..while）》》
+《《循环控制语句》》
+《《循环控制语句用于控制程序的流程， 以实现程序的各种结构方式。
+Lua 支持以下循环控制语句：
+
+break 语句
+退出当前循环或语句，并开始脚本执行紧接着的语句。》》
+《《无限循环》》
+《《在循环体中如果条件永远为 true 循环语句就会永远执行下去，以下以 while 循环为例：
+
+while( true )
+do
+   print("循环将永远执行下去")
+end》》
+《《Lua 流程控制》》
+《《Lua 编程语言流程控制语句通过程序设定一个或多个条件语句来设定。在条件为 true 时执行指定程序代码，在条件为 false 时执行其他指定代码。
+控制结构的条件表达式结果可以是任何值，Lua认为false和nil为假，true和非nil为真。
+要注意的是Lua中 0 为 true
+
+Lua 提供了以下控制结构语句：
+if 语句
+if 语句由一个布尔表达式作为条件判断，其后紧跟其他语句组成
+
+if...else 语句
+if 语句 可以与 else 语句搭配使用, 在 if 条件表达式为 false 时执行 else 语句代码
+
+if 嵌套语句
+你可以在if 或 else if中使用一个或多个 if 或 else if 语句》》
+《《Lua 函数》》
+《《在Lua中，函数是对语句和表达式进行抽象的主要方法。既可以用来处理一些特殊的工作，也可以用来计算一些值。
+Lua 提供了许多的内建函数，你可以很方便的在程序中调用它们，如print()函数可以将传入的参数打印在控制台上。
+Lua 函数主要有两种用途：
+1.完成指定的任务，这种情况下函数作为调用语句使用；
+2.计算并返回值，这种情况下函数作为赋值语句的表达式使用。
+以下实例定义了函数 max()，参数为 num1, num2，用于比较两值的大小，并返回最大值：
+
+function max(num1, num2)
+
+   if (num1 > num2) then
+      result = num1;
+   else
+      result = num2;
+   end
+
+   return result; 
+end
+-- 调用函数
+print("两值比较最大值为 ",max(10,4))
+print("两值比较最大值为 ",max(5,6))
+
+Lua 中我们可以将函数作为参数传递给函数，如下实例：
+
+myprint = function(param)
+   print("这是打印函数 -   ##",param,"##")
+end
+
+function add(num1,num2,functionPrint)
+   result = num1 + num2
+   -- 调用传递的函数参数
+   functionPrint(result)
+end
+myprint(10)
+-- myprint 函数作为参数传递
+add(2,5,myprint)
+
+Lua函数中，在return后列出要返回的值得列表即可返回多值，如：
+
+
+function maximum (a)
+    local mi = 1             -- 最大值索引
+    local m = a[mi]          -- 最大值
+    for i,val in ipairs(a) do
+       if val > m then
+           mi = i
+           m = val
+       end
+    end
+    return m, mi
+end
+
+print(maximum({8,10,23,12,5}))
+
+Lua函数可以接受可变数目的参数，和C语言类似在函数参数列表中使用三点（...) 表示函数有可变的参数。
+Lua将函数的参数放在一个叫arg的表中，#arg 表示传入参数的个数。
+例如，我们计算几个数的平均值：
+
+function average(...)
+   result = 0
+   local arg={...}
+   for i,v in ipairs(arg) do
+      result = result + v
+   end
+   print("总共传入 " .. #arg .. " 个数")
+   return result/#arg
+end
+
+print("平均值为",average(10,5,3,4,5,6))》》
+《《Lua 运算符》》
+《《运算符是一个特殊的符号，用于告诉解释器执行特定的数学或逻辑运算。Lua提供了以下几种运算符类型：
+
+算术运算符,关系运算符,逻辑运算符,其他运算符
+
+算术运算符
+下表列出了 Lua 语言中的常用算术运算符，设定 A 的值为10，B 的值为 20：
+
++	加法	A + B 输出结果 30
+-	减法	A - B 输出结果 -10
+*	乘法	A * B 输出结果 200
+/	除法	B / A 输出结果 2
+%	取余	B % A 输出结果 0
+^	乘幂	A^2   输出结果 100
+-	负号	-A    输出结果v -10
+
+关系运算符
+下表列出了 Lua 语言中的常用关系运算符，设定 A 的值为10，B 的值为 20：
+
+
+==	等于，检测两个值是否相等，相等返回 true，
+否则返回 false	(A == B) 为 false。
+~=	不等于，检测两个值是否相等，相等返回 false，
+否则返回 true<	(A ~= B) 为 true。
+>	大于，如果左边的值大于右边的值，返回 true，
+否则返回 false	(A > B) 为 false。
+<	小于，如果左边的值大于右边的值，返回 false，
+否则返回 true	(A < B) 为 true。
+>=	大于等于，如果左边的值大于等于右边的值，返回 true，
+否则返回 false	(A >= B) 返回 false。
+<=	小于等于， 如果左边的值小于等于右边的值，返回 true，
+否则返回 false	(A <= B) 返回 true。
+
+逻辑运算符
+下表列出了 Lua 语言中的常用逻辑运算符，设定 A 的值为 true，B 的值为 false：
+
+and	逻辑与操作符。 
+如果两边的操作都为 true 则条件为 true。	
+(A and B) 为 false。
+or	逻辑或操作符。 
+如果两边的操作任一一个为 true 则条件为 true。
+(A or B) 为 true。
+not	逻辑非操作符。
+与逻辑运算结果相反，如果条件为 true，逻辑非为 false。	
+not(A and B) 为 true。
+
+其他运算符
+下表列出了 Lua 语言中的连接运算符与计算表或字符串长度的运算符：
+
+..	连接两个字符串	a..b 
+#	一元运算符，返回字符串或表的长度。
+
+运算符优先级
+从高到低的顺序：
+
+
+^
+not    - (unary)
+*      /
++      -
+..
+<      >      <=     >=     ~=     ==
+and
+or》》
+《《Lua 字符串》》
+《《字符串或串(String)是由数字、字母、下划线组成的一串字符。
+Lua 语言中字符串可以使用以下三种方式来表示：
+
+单引号间的一串字符。
+双引号间的一串字符。
+[[和]]间的一串字符。
+
+以上三种方式的字符串实例如下：
+
+string1 = "ALua手册"
+print("\"字符串 1 是\"",string1)
+--字符串 1 是	ALua手册
+string2 = 'androlua.cn'
+--字符串 2 是	androlua.cn
+print("字符串 2 是",string2)
+string3 = [["Lua 教程"]]
+print("字符串 3 是",string3)
+--字符串 3 是	"Lua 教程"》》
+《《Lua 数组》》
+《《数组，就是相同数据类型的元素按一定顺序排列的集合，可以是一维数组和多维数组。
+Lua 数组的索引键值可以使用整数表示，数组的大小不是固定的。》》
+《《一维数组》》
+《《一维数组是最简单的数组，其逻辑结构是线性表。一维数组可以用for循环出数组中的元素，如下实例：
+
+array = {"Lua", "Tutorial"}
+for i= 0, 2 do
+   print(array[i])
+end
+
+以上代码执行输出结果为：
+
+nil
+Lua
+Tutorial
+
+正如你所看到的，我们可以使用整数索引来访问数组元素，如果知道的索引没有值则返回nil。
+在 Lua 索引值是以 1 为起始，但你也可以指定 0 开始。》》
+《《Lua 迭代器》》
+《《迭代器（iterator）是一种对象，它能够用来遍历标准模板库容器中的部分或全部元素，每个迭代器对象代表容器中的确定的地址
+
+在Lua中迭代器是一种支持指针类型的结构，它可以遍历集合的每一个元素。》》
+《《泛型 for 迭代器》》
+《《泛型 for 在自己内部保存迭代函数，实际上它保存三个值：迭代函数、状态常量、控制变量。
+
+泛型 for 迭代器提供了集合的 key/value 对，语法格式如下：
+
+for k, v in pairs(t) do
+    print(k, v)
+end
+上面代码中，k, v为变量列表；pair(t)为表达式列表。
+
+查看以下实例:
+
+array = {"Lua", "Tutorial"}
+
+for key,value in ipairs(array) 
+do
+   print(key, value)
+end
+以上代码执行输出结果为：
+
+Lua
+Tutorial
+
+以上实例中我们使用了 Lua 默认提供的迭代函数 ipairs。
+
+下面我们看看范性for的执行过程：
+
+首先，初始化，计算in后面表达式的值，表达式应该返回范性for需要的三个值：迭代函数、状态常量、控制变量；与多值赋值一样，如果表达式返回的结果个数不足三个会自动用nil补足，多出部分会被忽略。
+第二，将状态常量和控制变量作为参数调用迭代函数（注意：对于for结构来说，状态常量没有用处，仅仅在初始化时获取他的值并传递给迭代函数）。
+第三，将迭代函数返回的值赋给变量列表。
+第四，如果返回的第一个值为nil循环结束，否则执行循环体。
+第五，回到第二步再次调用迭代函数
+。在Lua中我们常常使用函数来描述迭代器，每次调用该函数就返回集合的下一个元素。Lua 的迭代器包含以下两种类型：
+
+1，无状态的迭代器
+2，多状态的迭代器》》
+《《无状态的迭代器》》
+《《无状态的迭代器是指不保留任何状态的迭代器，因此在循环中我们可以利用无状态迭代器避免创建闭包花费额外的代价。
+
+每一次迭代，迭代函数都是用两个变量（状态常量和控制变量）的值作为参数被调用，一个无状态的迭代器只利用这两个值可以获取下一个元素。
+
+这种无状态迭代器的典型的简单的例子是ipairs，他遍历数组的每一个元素。
+
+以下实例我们使用了一个简单的函数来实现迭代器，实现 数字 n 的平方：
+
+function square(iteratorMaxCount,currentNumber)
+   if currentNumber<iteratorMaxCount
+   then
+      currentNumber = currentNumber+1
+   return currentNumber, currentNumber*currentNumber
+   end
+end
+
+for i,n in square,3,0
+do
+   print(i,n)
+end
+
+以上实例输出结果为：
+
+1
+4
+9
+
+迭代的状态包括被遍历的表（循环过程中不会改变的状态常量）和当前的索引下标（控制变量），ipairs和迭代函数都很简单，我们在Lua中可以这样实现：
+
+function iter (a, i)
+    i = i + 1
+    local v = a[i]
+    if v then
+       return i, v
+    end
+end
+ 
+function ipairs (a)
+    return iter, a, 0
+end
+
+当Lua调用ipairs(a)开始循环时，他获取三个值：迭代函数iter、状态常量a、控制变量初始值0；然后Lua调用iter(a,0)返回1,a[1]（除非a[1]=nil）；第二次迭代调用iter(a,1)返回2,a[2]……直到第一个nil元素。》》
+《《多状态的迭代器》》
+《《很多情况下，迭代器需要保存多个状态信息而不是简单的状态常量和控制变量，最简单的方法是使用闭包，还有一种方法就是将所有的状态信息封装到table内，将table作为迭代器的状态常量，因为这种情况下可以将所有的信息存放在table内，所以迭代函数通常不需要第二个参数。
+
+以下实例我们创建了自己的迭代器：
+
+array = {"Lua", "Tutorial"}
+
+function elementIterator (collection)
+   local index = 0
+   local count = #collection
+   -- 闭包函数
+   return function ()
+      index = index + 1
+      if index <= count
+      then
+         --  返回迭代器的当前元素
+         return collection[index]
+      end
+   end
+end
+
+for element in elementIterator(array)
+do
+   print(element)
+end
+
+以上实例输出结果为：
+
+Lua
+Tutorial
+
+以上实例中我们可以看到，elementIterator 内使用了闭包函数，实现计算集合大小并输出各个元素。》》
+《《Lua 文件 I/O》》
+《《Lua I/O 库用于读取和处理文件。分为简单模式（和C一样）、完全模式。
+
+简单模式（simple model）拥有一个当前输入文件和一个当前输出文件，并且提供针对这些文件相关的操作。
+完全模式（complete model） 使用外部的文件句柄来实现。它以一种面对对象的形式，将所有的文件操作定义为文件句柄的方法
+简单模式在做一些简单的文件操作时较为合适。但是在进行一些高级的文件操作的时候，简单模式就显得力不从心。例如同时读取多个文件这样的操作，使用完全模式则较为合适。
+
+打开文件操作语句如下：
+
+file = io.open (filename , mode)
+mode 的值有：
+
+"r"	以只读方式打开文件，该文件必须存在。
+"w"	打开只写文件，若文件存在则文件长度清为0，即该文件内容会消失。若文件不存在则建立该文件。
+"a"	以附加的方式打开只写文件。若文件不存在，则会建立该文件，如果文件存在，写入的数据会被加到文件尾，即文件原先的内容会被保留。（EOF符保留）
+"r+"	以可读写方式打开文件，该文件必须存在。
+"w+"	打开可读写文件，若文件存在则文件长度清为零，即该文件内容会消失。若文件不存在则建立该文件。
+"a+"	与a类似，但此文件可读可写
+"b"	二进制模式，如果文件是二进制文件，可以加上b》》
+《《I/O 简单模式》》
+《《简单模式使用标准的 I/O 或使用一个当前输入文件和一个当前输出文件。
+
+以下为 file.lua 文件代码，操作的文件为test.lua(如果没有你需要创建该文件)，代码如下：
+
+-- 以只读方式打开文件
+file = io.open("test.lua", "r")
+
+-- 设置默认输入文件为 test.lua
+io.input(file)
+
+-- 输出文件第一行
+print(io.read())
+
+-- 关闭打开的文件
+io.close(file)
+
+-- 以附加的方式打开只写文件
+file = io.open("test.lua", "a")
+
+-- 设置默认输出文件为 test.lua
+io.output(file)
+
+-- 在文件最后一行添加 Lua 注释
+io.write("--  test.lua 文件末尾注释")
+
+-- 关闭打开的文件
+io.close(file)
+执行以上代码，你会发现，输出了 test.ua 文件的第一行信息，并在该文件最后一行添加了 lua 的注释。如我这边输出的是：
+
+-- test.lua 文件
+在以上实例中我们使用了 io."x" 方法，其中 io.read() 中我们没有带参数，参数可以是下表中的一个：
+
+"*n"	读取一个数字并返回它。例：file.read("*n")
+"*a"	从当前位置读取整个文件。例：file.read("*a")
+"*l"（默认）	读取下一行，在文件尾 (EOF) 处返回 nil。例：file.read("*l")
+number	返回一个指定字符个数的字符串，或在 EOF 时返回 nil。例：file.read(5)
+其他的 io 方法有：
+
+io.tmpfile():返回一个临时文件句柄，该文件以更新模式打开，程序结束时自动删除
+
+io.type(file): 检测obj是否一个可用的文件句柄
+
+io.flush(): 向文件写入缓冲中的所有数据
+
+io.lines(optional file name): 返回一个迭代函数,每次调用将获得文件中的一行内容,当到文件尾时，将返回nil,但不关闭文件》》
+《《I/O 完全模式》》
+《《通常我们需要在同一时间处理多个文件。我们需要使用 file:function_name 来代替 io.function_name 方法。以下实例演示了如同同时处理同一个文件:
+
+-- 以只读方式打开文件
+file = io.open("test.lua", "r")
+
+-- 输出文件第一行
+print(file:read())
+
+-- 关闭打开的文件
+file:close()
+
+-- 以附加的方式打开只写文件
+file = io.open("test.lua", "a")
+
+-- 在文件最后一行添加 Lua 注释
+file:write("--test")
+
+-- 关闭打开的文件
+file:close()
+执行以上代码，你会发现，输出了 test.ua 文件的第一行信息，并在该文件最后一行添加了 lua 的注释。如我这边输出的是：
+
+-- test.lua 文件
+read 的参数与简单模式一致。》》
+《《I/O 的其他方法》》
+《《file:seek(optional whence, optional offset): 设置和获取当前文件位置,成功则返回最终的文件位置(按字节),失败则返回nil加错误信息。参数 whence 值可以是:
+
+"set": 从文件头开始
+"cur": 从当前位置开始[默认]
+"end": 从文件尾开始
+offset:默认为0
+不带参数file:seek()则返回当前位置,file:seek("set")则定位到文件头,file:seek("end")则定位到文件尾并返回文件大小
+file:flush(): 向文件写入缓冲中的所有数据
+
+io.lines(optional file name): 打开指定的文件filename为读模式并返回一个迭代函数,每次调用将获得文件中的一行内容,当到文件尾时，将返回nil,并自动关闭文件。
+若不带参数时io.lines() <=> io.input():lines(); 读取默认输入设备的内容，但结束时不关闭文件,如
+
+for line in io.lines("main.lua") do
+
+　　print(line)
+
+　　end
+
+以下实例使用了 seek 方法，定位到文件倒数第 25 个位置并使用 read 方法的 *a 参数，即从当期位置(倒数第 25 个位置)读取整个文件。
+
+-- 以只读方式打开文件
+file = io.open("test.lua", "r")
+
+file:seek("end",-25)
+print(file:read("*a"))
+
+-- 关闭打开的文件
+file:close()
+我这边输出的结果是：
+
+st.lua 文件末尾--test》》

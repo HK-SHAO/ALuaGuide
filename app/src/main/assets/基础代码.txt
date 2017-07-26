@@ -1,0 +1,250 @@
+《《打印》》
+《《print"Hello World！"
+print("Hello World")》》
+
+
+
+
+《《注释》》
+《《单行注释  --
+多行注释  --[[]]》》
+
+
+
+《《字符串》》
+《《a="String"
+a=[[String]]
+a=[===[String]===]》》
+
+
+
+
+
+《《赋值》》
+《《a="Hello World"
+
+--lua支持多重赋值
+a,b="String a","String b"
+
+--交换值
+a,b="String a","String b"
+a,b=b,a》》
+
+
+
+
+《《类型简介》》
+《《Lua 存在的数据类型包括:
+1.nil
+此类型只有一个值 nil。用于表示“空”值。全局变量默认为 nil，删除一个已经赋值的全局变量只需要将其赋值为 nil（对比 JavaScript，赋值 null 并不能完全删除对象的属性，属性还存在，值为 null）
+
+2.boolean
+此类型有两个值 true 和 false。在 Lua 中，false 和 nil 都表示条件假，其他值都表示条件真（区别于 C/C++ 等语言的是，0 是真）
+
+
+3.number
+双精浮点数（IEEE 754 标准），Lua 没有整数类型
+
+4.string
+你可以保存任意的二进制数据到字符串中（包括 0）。字符串中的字符是不可以改变的（需要改变时，你只能创建一个新的字符串）。获取字符串的长度，可以使用 # 操作符（长度操作符）。例如：print(#”hello”)。字符串可以使用单引号，也可以使用双引号包裹，对于多行的字符串还可以使用 [[ 和 ]] 包裹。字符串中可以使用转义字符，例如 \n \r 等。使用 [[ 和 ]] 包裹的字符串中的转义字符不会被转义
+
+5.userdata
+用于保存任意的 C 数据。userdata 只能支持赋值操作和比较测试
+
+6.function
+函数是第一类值（first-class value），我们能够像使用其他变量一样的使用函数（函数能够保存在变量中，可以作为参数传递给函数）
+
+7.thread
+区别于我们常常说的系统级线程
+
+8.table
+被实现为关联数组（associative arrays），可以通过任何值来进行索引（nil 除外）。和全局变量一样，table 中未赋值的域为 nil，删除一个域只需要将其赋值为 nil（实际上，全局变量就是被放置在一个 table 中）
+
+
+
+type 函数用于返回值的类型：
+print(type("Hello World")) --> string
+print(type(10.4*3))        --> number
+print(type(print))         --> function
+print(type(type(X)))       --> string》》
+
+
+
+
+
+
+
+
+
+《《Table(数组)》》
+《《table是lua唯一的数据结构。
+table是lua中最重要的数据类型。 
+table类似于 python 中的字典。
+table只能通过构造式来创建。其他语言提供的其他数据结构如array、list等等，lua都是通过table来实现的。
+table非常实用，可以用在不同的情景下。最常用的方式就是把table当成其他语言的数组。
+
+实例1:
+mytable = {}
+for index = 1, 100 do
+    mytable[index] = math.random(1,1000)
+end
+
+说明：
+1.数组不必事先定义大小，可动态增长。
+2.创建包含100个元素的table，每个元素随机赋1-1000之间的值。
+3.可以通过mytable[x]访问任意元素，x表示索引。
+4.索引从1开始。
+
+实例2:
+tab = { a = 10, b = 20, c = 30, d = 'www.jb51.net' }
+print(tab["a"]) 
+
+说明：
+1.table 中的每项要求是 key = value 的形式。
+2.key 只能是字符串， 这里的 a, b, c, d 都是字符串，但是不能加上引号。
+3.通过 key 来访问 table 的值，这时候， a 必须加上引号。
+
+实例3:
+tab = { 10, s = 'abc', 11, 12, 13 } 
+print(tab[1]) = 10
+print(tab[2]) = 11
+print(tab[3]) = 12
+print(tab[4]) = 13
+说明：
+1.数标从1开始。
+2.省略key，会自动以1开始编号，并跳过设置过的key。》》
+
+
+
+《《比较操作符》》
+《《--Lua 支持下列比较操作符：
+
+==: 等于
+~=: 不等于
+<: 小于
+>: 大于
+<=: 小于等于
+>=: 大于等于
+这些操作的结果不是 false就是 true。》》
+
+
+
+
+《《For循环》》
+《《--给定条件进行循环
+
+--输出从1到10
+for i=1,10 do
+print(i)
+end
+
+
+--输出从10到1
+for i=10,1,-1 do
+print(i)
+end
+
+--打印数组a中所有的值
+a={"a","b","c","d"}
+for index,content in pairs(a) do
+print(content)
+end》》
+
+
+《《While循环》》
+《《--只要条件为真便会一直循环下去
+
+--输出1到10
+a=0
+while a~=10 do
+a=a+1
+print(a)
+end
+
+--输出10到1
+a=11
+while a~=1 do
+a=a-1
+print(a)
+end
+
+--打印数组a中的所有值
+shuzu={"a","b","c","d"}
+a=0
+while a~=#shuzu do
+a=a+1
+print(shuzu[a])
+end》》
+
+
+
+《《if(判断语句)》》
+《《--判断值是否为真
+a=true
+if a then
+print("真")
+else
+print("假")
+end
+
+--比较值是否相同
+a=true
+b=false
+if a==b then
+print("真")
+else
+print("假")
+end》》
+
+
+《《function(函数)》》
+《《函数有两个用途
+1.完成指定功能，函数作为调用语句使用
+2.计算并返回值，函数作为赋值语句的表达式使用
+
+
+实例1:
+function 读取文件(路径)
+文件内容=io.open(路径):read("*a")
+return 文件内容--return用来返回值
+end
+
+
+
+实例2:
+require "import"
+import "android.widget.EditText"
+import "android.widget.LinearLayout"
+function 编辑框()
+return EditText(activity)
+end
+layout={
+  LinearLayout;
+  id="父布局",
+  {编辑框,
+    id="edit",
+    text="文本",
+   },
+};
+activity.setContentView(loadlayout(layout))
+--把这段代码放到调试里面去测试》》
+
+
+《《基础代码》》
+《《activity.setTitle('Title')--设置窗口标题
+activity.setContentView(loadlayout(layout))--设置窗口视图
+activity.setTheme(android.R.style.Theme_DeviceDefault_Light)--设置主题
+activity.getWidth()--获取屏幕宽
+activity.getHeight()--获取屏幕高
+activity.newActivity("main")--跳转页面
+activity.finish()--关闭当前页面
+activity.recreate()--重构activity
+os.exit()--结束程序
+tostring()--转换字符串
+tonumber()--转换数字
+tointeger()--转换整数
+--线程
+--thread
+thread(function()print"线程"end)
+--task
+task(function()print"线程"end)》》

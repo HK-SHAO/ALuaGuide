@@ -1,0 +1,998 @@
+《《获取设备标识码》》
+《《import "android.provider.Settings$Secure"
+android_id = Secure.getString(activity.getContentResolver(), Secure.ANDROID_ID)》》
+
+《《获取IMEI》》
+《《import "android.content.Context" 
+imei=activity.getSystemService(Context.TELEPHONY_SERVICE).getDeviceId()》》
+
+《《控件背景渐变动画》》
+《《view=控件id
+color1 = 0xffFF8080;
+color2 = 0xff8080FF;
+color3 = 0xff80ffff;
+color4 = 0xff80ff80;
+import "android.animation.ObjectAnimator"
+import "android.animation.ArgbEvaluator"
+import "android.animation.ValueAnimator"
+import "android.graphics.Color"
+colorAnim = ObjectAnimator.ofInt(view,"backgroundColor",{color1, color2, color3,color4})
+colorAnim.setDuration(3000)
+colorAnim.setEvaluator(ArgbEvaluator())
+colorAnim.setRepeatCount(ValueAnimator.INFINITE)
+colorAnim.setRepeatMode(ValueAnimator.REVERSE)
+colorAnim.start()》》
+
+
+《《精准获取屏幕尺寸》》
+《《function getScreenPhysicalSize(ctx) 
+  import "android.util.DisplayMetrics"
+  dm = DisplayMetrics();
+  ctx.getWindowManager().getDefaultDisplay().getMetrics(dm);
+  diagonalPixels = Math.sqrt(Math.pow(dm.widthPixels, 2) + Math.pow(dm.heightPixels, 2));
+  return diagonalPixels / (160 * dm.density);
+end
+print(getScreenPhysicalSize(activity))》》
+
+
+
+《《发送邮件》》
+《《import "android.content.Intent"
+i = Intent(Intent.ACTION_SEND)
+i.setType("message/rfc822") 
+i.putExtra(Intent.EXTRA_EMAIL, {"2113075983@.com"})
+i.putExtra(Intent.EXTRA_SUBJECT,"Feedback")
+i.putExtra(Intent.EXTRA_TEXT,"Content")
+activity.startActivity(Intent.createChooser(i, "Choice"))》》
+
+《《自定义默认弹窗标题,消息,按钮的颜色》》
+《《dialog=AlertDialog.Builder(this)
+.setTitle("标题")
+.setMessage("消息")
+.setPositiveButton("积极",{onClick=function(v) print"点击了积极按钮"end})
+.setNeutralButton("中立",nil)
+.setNegativeButton("否认",nil)
+.show()
+dialog.create()
+
+
+--更改消息颜色
+message=dialog.findViewById(android.R.id.message)
+message.setTextColor(0xff1DA6DD)
+
+--更改Button颜色
+import "android.graphics.Color"
+dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(0xff1DA6DD)
+dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(0xff1DA6DD)
+dialog.getButton(dialog.BUTTON_NEUTRAL).setTextColor(0xff1DA6DD)
+
+--更改Title颜色
+import "android.text.SpannableString"
+import "android.text.style.ForegroundColorSpan"
+import "android.text.Spannable"
+sp = SpannableString("标题")
+sp.setSpan(ForegroundColorSpan(0xff1DA6DD),0,#sp,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+dialog.setTitle(sp)》》
+
+
+《《获取手机存储空间》》
+《《--获取手机内置剩余存储空间
+ function GetSurplusSpace()
+ fs =  StatFs(Environment.getDataDirectory().getPath())
+ return Formatter.formatFileSize(activity, (fs.getAvailableBytes()))
+ end
+
+ --获取手机内置存储总空间
+ function GetTotalSpace()
+ path = Environment.getExternalStorageDirectory()
+ stat = StatFs(path.getPath())
+ blockSize = stat.getBlockSize()
+ totalBlocks = stat.getBlockCount()
+ return Formatter.formatFileSize(activity, blockSize * totalBlocks)
+ end》》
+
+
+《《获取视频第一帧》》
+《《function GetVideoFrame(path)
+  import "android.media.MediaMetadataRetriever"
+  media = MediaMetadataRetriever()
+  media.setDataSource(tostring(path))
+  return media.getFrameAtTime()
+end》》
+
+《《选择文件模块》》
+《《import "android.widget.ArrayAdapter"
+import "android.widget.LinearLayout"
+import "android.widget.TextView"
+import "java.io.File"
+import "android.widget.ListView"
+import "android.app.AlertDialog"
+function ChoiceFile(StartPath,callback)
+  --创建ListView作为文件列表
+  lv=ListView(activity).setFastScrollEnabled(true)
+  --创建路径标签
+  cp=TextView(activity)
+  lay=LinearLayout(activity).setOrientation(1).addView(cp).addView(lv)
+  ChoiceFile_dialog=AlertDialog.Builder(activity)--创建对话框
+  .setTitle("选择文件")
+  .setView(lay)
+  .show()
+  adp=ArrayAdapter(activity,android.R.layout.simple_list_item_1)
+  lv.setAdapter(adp)
+  function SetItem(path)
+    path=tostring(path)
+    adp.clear()--清空适配器
+    cp.Text=tostring(path)--设置当前路径
+    if path~="/" then--不是根目录则加上../
+      adp.add("../")
+    end
+    ls=File(path).listFiles()
+    if ls~=nil then
+      ls=luajava.astable(File(path).listFiles()) --全局文件列表变量
+      table.sort(ls,function(a,b)
+        return (a.isDirectory()~=b.isDirectory() and a.isDirectory()) or ((a.isDirectory()==b.isDirectory()) and a.Name<b.Name)
+      end)
+    else
+      ls={}
+    end
+    for index,c in ipairs(ls) do
+      if c.isDirectory() then--如果是文件夹则
+        adp.add(c.Name.."/")
+      else--如果是文件则
+        adp.add(c.Name)
+      end
+    end
+  end
+  lv.onItemClick=function(l,v,p,s)--列表点击事件
+    项目=tostring(v.Text)
+    if tostring(cp.Text)=="/" then
+      路径=ls[p+1]
+    else
+      路径=ls[p]
+    end
+
+    if 项目=="../" then
+      SetItem(File(cp.Text).getParentFile())
+    elseif 路径.isDirectory() then
+      SetItem(路径)
+    elseif 路径.isFile() then
+      callback(tostring(路径))
+      ChoiceFile_dialog.hide()
+    end
+
+  end
+
+  SetItem(StartPath)
+end
+
+--ChoiceFile(StartPath,callback)
+--第一个参数为初始化路径,第二个为回调函数
+--原创》》
+
+《《选择路径模块》》
+《《require "import"
+import "android.widget.ArrayAdapter"
+import "android.widget.LinearLayout"
+import "android.widget.TextView"
+import "java.io.File"
+import "android.widget.ListView"
+import "android.app.AlertDialog"
+function ChoicePath(StartPath,callback)
+  --创建ListView作为文件列表
+  lv=ListView(activity).setFastScrollEnabled(true)
+  --创建路径标签
+  cp=TextView(activity)
+  lay=LinearLayout(activity).setOrientation(1).addView(cp).addView(lv)
+  ChoiceFile_dialog=AlertDialog.Builder(activity)--创建对话框
+  .setTitle("选择路径")
+  .setPositiveButton("OK",{
+  onClick=function()
+  callback(tostring(cp.Text))
+  end})
+.setNegativeButton("Canel",nil)
+  .setView(lay)
+  .show()
+  adp=ArrayAdapter(activity,android.R.layout.simple_list_item_1)
+  lv.setAdapter(adp)
+  function SetItem(path)
+    path=tostring(path)
+    adp.clear()--清空适配器
+    cp.Text=tostring(path)--设置当前路径
+    if path~="/" then--不是根目录则加上../
+      adp.add("../")
+    end
+    ls=File(path).listFiles()
+    if ls~=nil then
+      ls=luajava.astable(File(path).listFiles()) --全局文件列表变量
+      table.sort(ls,function(a,b)
+        return (a.isDirectory()~=b.isDirectory() and a.isDirectory()) or ((a.isDirectory()==b.isDirectory()) and a.Name<b.Name)
+      end)
+    else
+      ls={}
+    end
+    for index,c in ipairs(ls) do
+      if c.isDirectory() then--如果是文件夹则
+        adp.add(c.Name.."/")
+      end
+    end
+  end
+  lv.onItemClick=function(l,v,p,s)--列表点击事件
+    项目=tostring(v.Text)
+    if tostring(cp.Text)=="/" then
+      路径=ls[p+1]
+    else
+      路径=ls[p]
+    end
+
+    if 项目=="../" then
+      SetItem(File(cp.Text).getParentFile())
+    elseif 路径.isDirectory() then
+      SetItem(路径)
+    elseif 路径.isFile() then
+      callback(tostring(路径))
+      ChoiceFile_dialog.hide()
+    end
+
+  end
+
+  SetItem(StartPath)
+end
+
+
+import "android.os.*"
+ChoicePath(Environment.getExternalStorageDirectory().toString(),
+function(path)
+print(path)
+end)
+
+--第一个参数为初始化路径,第二个为回调函数
+--原创》》
+
+
+
+《《获取视图中的所有文本》》
+《《function GetAllText(view)
+textTable={}
+function GetText(Parent)
+local number=Parent.getChildCount()
+for i=0,number do
+local view=Parent.getChildAt(i)
+if pcall(function()view.addView(TextView(activity))end) then
+GetText(view)
+elseif pcall(function()view.getText()end) then
+table.insert(textTable,tostring(view.Text))
+end
+end
+end
+GetText(view)
+return textTable
+end
+
+print(table.unpack(GetAllText(Parent)))》》
+
+
+
+
+
+
+
+
+《《控件圆角》》
+《《function CircleButton(view,InsideColor,radiu)
+  import "android.graphics.drawable.GradientDrawable"
+  drawable = GradientDrawable() 
+  drawable.setShape(GradientDrawable.RECTANGLE) 
+  drawable.setColor(InsideColor)
+  drawable.setCornerRadii({radiu,radiu,radiu,radiu,radiu,radiu,radiu,radiu});
+  view.setBackgroundDrawable(drawable)
+end
+角度=50
+控件id=ed
+控件颜色=0xFF09639C
+CircleButton(控件id,控件颜色,角度)》》
+
+《《匹配汉字》》
+《《function filter_spec_chars(s)
+	local ss = {}
+	for k = 1, #s do
+		local c = string.byte(s,k)
+		if not c then break end
+		if (c>=48 and c<=57) or (c>= 65 and c<=90) or (c>=97 and c<=122) then
+			if not string.char(c):find("%w") then
+   table.insert(ss, string.char(c))
+	end
+ 	elseif c>=228 and c<=233 then
+			local c1 = string.byte(s,k+1)
+			local c2 = string.byte(s,k+2)
+			if c1 and c2 then
+				local a1,a2,a3,a4 = 128,191,128,191
+				if c == 228 then a1 = 184
+				elseif c == 233 then a2,a4 = 190,c1 ~= 190 and 191 or 165
+				end
+				if c1>=a1 and c1<=a2 and c2>=a3 and c2<=a4 then
+					k = k + 2
+					table.insert(ss, string.char(c,c1,c2))
+				end
+			end
+		end
+	end
+	return table.concat(ss)
+end
+print(filter_spec_chars("A1B2汉C3D4字E5F6,,,"))
+--来源网络,加了个if过滤掉英文与数字,使其只捕获中文》》
+
+
+
+《《播放音乐与视频》》
+《《import "android.media.MediaPlayer"
+mediaPlayer =  MediaPlayer()
+
+--初始化参数
+mediaPlayer.reset()
+
+--设置播放资源
+mediaPlayer.setDataSource("storage/sdcard0/a.mp3")
+
+--开始缓冲资源
+mediaPlayer.prepare()
+
+--是否循环播放该资源
+mediaPlayer.setLooping(true)
+
+--缓冲完成的监听
+mediaPlayer.setOnPreparedListener(MediaPlayer.OnPreparedListener() {
+    onPrepared=function(mediaPlayer
+        mediaPlayer.start()
+   end});
+
+--是否在播放
+mediaPlayer.isPlaying()
+
+--暂停播放
+mediaPlayer.pause()
+
+--从30位置开始播放
+mediaPlayer.seekTo(30)
+
+--停止播放
+mediaPlayer.stop()
+
+
+
+
+
+
+--播放视频
+--视频的播放与音乐播放过程一样：
+
+--先创建一个媒体对象
+import "android.media.MediaPlayer"
+mediaPlayer =  MediaPlayer()
+--初始化参数
+mediaPlayer.reset()
+
+--设置播放资源
+mediaPlayer.setDataSource("storage/sdcard0/a.mp4")
+
+--拿到显示的SurfaceView
+sh = surfaceView.getHolder()
+sh.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
+
+--设置显示SurfaceView
+mediaPlayer.setDisplay(sh)
+
+--设置音频流格式
+mediaPlayer.setAudioStreamType(AudioManager.Stream_Music)
+
+--开始缓冲资源
+mediaPlayer.prepare()
+
+--缓冲完成的监听
+mediaPlayer.setOnPreparedListener(MediaPlayer.OnPreparedListener{
+   onPrepared=function(mediaPlayer)
+		--开始播放
+        mediaPlayer.start()
+   end
+});
+
+--释放播放器
+mediaPlayer.release()
+
+
+--非原创》》
+
+
+
+《《获取系统SDK，Android版本及设备型号》》
+《《device_model = Build.MODEL --设备型号 
+
+version_sdk = Build.VERSION.SDK --设备SDK版本 
+
+version_release = Build.VERSION.RELEASE --设备的系统版本》》
+
+
+
+《《控件颜色修改》》
+《《import "android.graphics.PorterDuffColorFilter"
+import "android.graphics.PorterDuff"
+
+--修改按钮颜色
+button.getBackground().setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+
+--修改编辑框颜色
+edittext.getBackground().setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP));
+
+--修改Switch颜色
+switch.ThumbDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP));
+switch.TrackDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+
+--修改ProgressBar颜色
+progressbar.IndeterminateDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+
+--修改SeekBar滑条颜色
+seekbar.ProgressDrawable.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))
+--修改SeekBar滑块颜色
+seekbar.Thumb.setColorFilter(PorterDuffColorFilter(0xFFFB7299,PorterDuff.Mode.SRC_ATOP))》》
+
+
+
+
+
+《《修改对话框按钮颜色》》
+《《function DialogButtonFilter(dialog,button,WidgetColor)
+if Build.VERSION.SDK_INT >= 21 then
+import "android.graphics.PorterDuffColorFilter"
+import "android.graphics.PorterDuff"
+if button==1 then
+dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(WidgetColor)
+elseif button==2 then
+dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(WidgetColor)
+elseif button==3 then
+dialog.getButton(dialog.BUTTON_NEUTRAL).setTextColor(WidgetColor)
+end
+end
+end
+--第一个参数为对话框的变量
+--第二个参数为1时，则修改POSITIVE按钮颜色,为二则修改NEGATIVE按钮颜色,为三则修改NEUTRAL按钮颜色
+--第三个参数为要修改成的颜色》》
+
+
+
+
+
+
+
+《《查询本地所有视频》》
+《《function QueryAllVideo()
+import "android.provider.MediaStore"
+cursor = activity.ContentResolver
+mImageUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+mCursor = cursor.query(mImageUri,nil,nil,nil,MediaStore.Video.Media.DATE_TAKEN)
+mCursor.moveToLast()
+VideoTable={}
+while mCursor.moveToPrevious() do
+   path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Video.Media.DATA))
+   table.insert(VideoTable,tostring(path))
+end
+mCursor.close()
+return VideoTable
+end
+--返回一个表》》
+
+
+
+
+《《查询本地所有图片》》
+《《function QueryAllImage()
+import "android.provider.MediaStore"
+cursor = activity.ContentResolver
+mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+mCursor = cursor.query(mImageUri,nil,nil,nil,MediaStore.Images.Media.DATE_TAKEN)
+mCursor.moveToLast()
+imageTable={}
+while mCursor.moveToPrevious() do
+   path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA))
+   table.insert(imageTable,tostring(path))
+end
+mCursor.close()
+return imageTable
+end
+--返回一个表》》
+
+
+
+
+《《递归查找文件》》
+《《function outPath(ret) 
+for i,p in pairs(luajava.astable(ret)) do
+print(p)
+end
+end
+function find(catalog,name)
+ local n=0
+ local t=os.clock()
+ local ret={}
+ require "import"
+ import "java.io.File" 
+ import "java.lang.String"
+ function FindFile(catalog,name)
+   local name=tostring(name)
+   local ls=catalog.listFiles() or File{}
+   for 次数=0,#ls-1 do
+     --local 目录=tostring(ls[次数])
+     local f=ls[次数]
+     if f.isDirectory() then--如果是文件夹则继续匹配
+       FindFile(f,name)
+     else--如果是文件则
+       n=n+1
+       if n%1000==0 then
+         print(n,os.clock()-t)
+       end
+      local nm=f.Name
+       if string.find(nm,name) then
+         --thread(insert,目录)
+         table.insert(ret,tostring(f))
+       end
+     end
+   luajava.clear(f)
+   end
+ end
+ FindFile(catalog,name)
+ call("outPath",ret)
+end
+
+import "java.io.File"
+
+catalog=File("/sdcard/AndroLua")
+name=".j?pn?g"
+thread(find,catalog,name)》》
+
+《《获取手机内置存储路径》》
+《《Environment.getExternalStorageDirectory().toString()》》
+
+
+
+
+《《获取已安装程序的包名、版本号、最后更新时间、图标、应用名称》》
+《《function GetAppInfo(包名)
+  import "android.content.pm.PackageManager"
+  local pm = activity.getPackageManager();
+  local 图标 = pm.getApplicationInfo(tostring(包名),0)
+  local 图标 = 图标.loadIcon(pm);
+  local pkg = activity.getPackageManager().getPackageInfo(包名, 0); 
+  local 应用名称 = pkg.applicationInfo.loadLabel(activity.getPackageManager())
+  local 版本号 = activity.getPackageManager().getPackageInfo(包名, 0).versionName
+  local 最后更新时间 = activity.getPackageManager().getPackageInfo(包名, 0).lastUpdateTime
+  local cal = Calendar.getInstance();
+  cal.setTimeInMillis(最后更新时间); 
+  local 最后更新时间 = cal.getTime().toLocaleString()
+  return 包名,版本号,最后更新时间,图标,应用名称
+end》》
+
+《《获取指定安装包的包名,图标,应用名》》
+《《import "android.content.pm.PackageManager"
+import "android.content.pm.ApplicationInfo"
+function GetApkInfo(archiveFilePath)
+pm = activity.getPackageManager()
+info = pm.getPackageArchiveInfo(archiveFilePath, PackageManager.GET_ACTIVITIES); 
+if info ~= nil then
+  appInfo = info.applicationInfo;
+ appName = tostring(pm.getApplicationLabel(appInfo))
+  packageName = appInfo.packageName; --安装包名称 
+  version=info.versionName; --版本信息 
+   icon = pm.getApplicationIcon(appInfo);--图标
+end
+return packageName,version,icon
+end》》
+
+《《获取某程序是否安装》》
+《《if pcall(function() activity.getPackageManager().getPackageInfo("包名",0) end) then
+  print("安装了")
+else
+  print("没安装")
+end》》
+
+《《设置TextView字体风格》》
+《《import "android.graphics.Paint"
+--设置中划线
+id.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG)
+--设置下划线
+id.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG )
+--设置加粗
+id.getPaint().setFakeBoldText(true)
+--设置斜体
+id.getPaint().setTextSkewX(0.2)
+
+--设置TypeFace
+import "android.graphics.Typeface"
+id.getPaint().setTypeface()
+--参数列表
+Typeface.DEFAULT 默认字体
+Typeface.DEFAULT_BOLD 加粗字体
+Typeface.MONOSPACE monospace字体
+Typeface.SANS_SERIF sans字体
+Typeface.SERIF serif字体》》
+
+
+
+《《缩放图片》》
+《《function rotateToFit(bm,degrees)
+    import "android.graphics.Matrix"
+    import "android.graphics.Bitmap"
+    width = bm.getWidth()
+    height = bm.getHeight()
+    matrix =  Matrix()
+    matrix.postRotate(degrees)
+    bmResult = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true)
+    return bmResult
+  end
+bm=loadbitmap(图片路径)
+缩放级别=2
+rotateToFit(bm,degrees)
+--非原创》》
+
+《《获取运营商名称》》
+《《import "android.content.Context" 
+运营商名称 = this.getSystemService(Context.TELEPHONY_SERVICE).getNetworkOperatorName()
+print(运营商名称)
+--添加权限   READ_PHONE_STATE》》
+
+
+《《Drawable着色》》
+《《function ToColor(path,color)
+ local  aa=BitmapDrawable(loadbitmap(tostring(path)))
+   aa.setColorFilter(PorterDuffColorFilter(color,PorterDuff.Mode.SRC_ATOP))
+return aa
+end》》
+
+
+
+
+《《保存图片到本地》》
+《《function SavePicture(name,bm)
+if  bm then
+import "java.io.FileOutputStream"
+import "java.io.File"
+import "android.graphics.Bitmap"
+name=tostring(name)
+f = File(name)
+out = FileOutputStream(f)
+bm.compress(Bitmap.CompressFormat.PNG,90, out)
+out.flush()
+out.close()
+return true
+else
+return false
+end
+end》》
+
+
+
+
+《《调用应用商店搜索应用》》
+《《import "android.content.Intent"
+import "android.net.Uri"
+intent = Intent("android.intent.action.VIEW")
+intent .setData(Uri.parse( "market://details?id="..activity.getPackageName()))
+this.startActivity(intent)》》
+
+
+
+《《分享》》
+《《--分享文件
+function Sharing(path)
+  import "android.webkit.MimeTypeMap"
+  import "android.content.Intent"
+  import "android.net.Uri"
+  import "java.io.File"
+  FileName=tostring(File(path).Name)
+  ExtensionName=FileName:match("%.(.+)")
+  Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+  intent = Intent();
+  intent.setAction(Intent.ACTION_SEND);
+  intent.setType(Mime);
+  file = File(path);
+  uri = Uri.fromFile(file);
+  intent.putExtra(Intent.EXTRA_STREAM,uri);
+  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+  activity.startActivity(Intent.createChooser(intent, "分享到:"));
+  end
+
+--分享文字
+text="分享的内容" 
+intent=Intent(Intent.ACTION_SEND); 
+intent.setType("text/plain"); 
+intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); 
+intent.putExtra(Intent.EXTRA_TEXT, text); 
+intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+activity.startActivity(Intent.createChooser(intent,"分享到:")); 》》
+
+
+《《调用其它程序打开文件》》
+《《function OpenFile(path)
+  import "android.webkit.MimeTypeMap"
+  import "android.content.Intent"
+  import "android.net.Uri"
+  import "java.io.File"
+  FileName=tostring(File(path).Name)
+  ExtensionName=FileName:match("%.(.+)")
+  Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName)
+  if Mime then 
+    intent = Intent(); 
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+    intent.setAction(Intent.ACTION_VIEW); 
+    intent.setDataAndType(Uri.fromFile(File(path)), Mime); 
+    activity.startActivity(intent);
+  else
+    Toastc("找不到可以用来打开此文件的程序")
+  end
+end》》
+
+
+《《图片圆角》》
+《《function GetRoundedCornerBitmap(bitmap,roundPx) 
+  import "android.graphics.PorterDuffXfermode"
+  import "android.graphics.Paint"
+  import "android.graphics.RectF"
+  import "android.graphics.Bitmap"
+  import "android.graphics.PorterDuff$Mode"
+  import "android.graphics.Rect"
+  import "android.graphics.Canvas"
+  import "android.util.Config"
+  width = bitmap.getWidth()
+  output = Bitmap.createBitmap(width, width,Bitmap.Config.ARGB_8888)
+  canvas = Canvas(output); 
+  color = 0xff424242; 
+  paint = Paint()
+  rect = Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()); 
+  rectF = RectF(rect); 
+  paint.setAntiAlias(true);
+  canvas.drawARGB(0, 0, 0, 0); 
+  paint.setColor(color); 
+  canvas.drawRoundRect(rectF, roundPx, roundPx, paint); 
+  paint.setXfermode(PorterDuffXfermode(Mode.SRC_IN)); 
+  canvas.drawBitmap(bitmap, rect, rect, paint); 
+  return output; 
+end
+import "android.graphics.drawable.BitmapDrawable"
+圆角弧度=50
+bitmap=loadbitmap(picturePath)
+RoundPic=GetRoundedCornerBitmap(bitmap)》》
+
+
+
+《《一键加群与QQ聊天》》
+《《import "android.net.Uri"
+import "android.content.Intent"
+--加群
+url="mqqapi://card/show_pslcard?src_type=internal&version=1&uin=383792635&card_type=group&source=qrcode"
+activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+
+--QQ聊天
+url="mqqwpa://im/chat?chat_type=wpa&uin=2113075983"
+activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))》》
+
+
+
+
+
+
+《《发送短信》》
+《《--后台发送短信
+ require "import"
+ import "android.telephony.*"
+ SmsManager.getDefault().sendTextMessage(tostring(号码), nil, tostring(内容), nil, nil)
+
+--调用系统发送短信
+import "android.content.Intent"
+import "android.net.Uri"
+uri = Uri.parse("smsto:"..号码)
+intent = Intent(Intent.ACTION_SENDTO, uri)
+intent.putExtra("sms_body",内容)
+intent.setAction("android.intent.action.VIEW")
+activity.startActivity(intent)》》
+
+
+《《判断数组中是否存在某个值》》
+《《function Table_exists(tables,value)
+for index,content in pairs(tables) do
+if content:find(value) then
+return true
+end
+end
+end》》
+
+
+《《字符串操作》》
+《《strings="左中右"
+
+--取字符串左边
+左=strings:match("(.+)中")
+
+
+--取字符串中间
+中=strings:match("左(.-)右")
+
+
+--取字符串右边
+右=strings:match("(.+)右")
+
+--替换
+string.gsub(原字符串,替换的字符串,替换成的字符串)
+
+--匹配子串位置
+起始位置,结束位置=string.find(字符串,子串)
+
+
+--按位置捕获字符串
+string.sub(字符串,子串起始位置,子串结束位置)》》
+
+
+《《剪切板操作》》
+《《import "android.content.Context" 
+--导入类
+
+a=activity.getSystemService(Context.CLIPBOARD_SERVICE).getText() 
+--获取剪贴板 
+
+activity.getSystemService(Context.CLIPBOARD_SERVICE).setText(edit.Text) 
+--写入剪贴板》》
+
+《《各种事件》》
+《《function main(...)
+  --...是newActivity传递过来的参数。
+  print("入口函数",...)
+end
+
+function onCreate()
+  print("窗口创建")
+end
+
+function onStart()
+  print("活动开始")
+end
+
+function onResume()
+  print("返回程序")
+end
+
+function onPause()
+  print("活动暂停")
+end
+
+function onStop()
+  print("活动停止")
+end
+
+function onDestroy()
+  print("程序已退出")
+end
+
+function onResult(name,...)
+  --name：返回的活动名称
+  --...：返回的参数
+  print("返回活动",name,...)
+end
+
+function onCreateOptionsMenu(menu)
+  --menu：选项菜单。
+  menu.add("菜单")
+end
+
+function onOptionsItemSelected(item)
+  --item：选中的菜单项
+  print(item.Title)
+end
+
+function onConfigurationChanged(config)
+  --config：配置信息
+  print("屏幕方向关闭")
+end
+
+function onKeyDown(keycode,event)
+  --keycode：键值
+  --event：事件
+  print("按键按下",keycode)
+end
+
+function onKeyUp(keycode,event)
+  --keycode：键值
+  --event：事件
+  print("按键抬起",keycode)
+end
+
+function onKeyLongPress(keycode,event)
+  --keycode：键值
+  --event：事件
+  print("按键长按",keycode)
+end
+
+function onTouchEvent(event)
+  --event：事件
+  print("触摸事件",event)
+end
+
+function onKeyDown(c,e)
+  if c==4 then
+--返回键事件
+end
+end
+
+
+id.onClick=function()
+--控件被单击
+end
+
+id.onLongClick=function()
+--控件被长按
+end
+
+
+id.onItemClick=function(p,v,i,s)
+--列表项目被单击
+项目=v.Text
+return true
+end
+
+id.onItemLongClick=function(p,v,i,s)
+--列表项目被长按
+项目=v.Text
+return true
+end
+
+
+id.onItemLongClick=function(p,v,i,s)
+--列表项目被长按
+项目=v.Text
+return true
+end
+
+--Spinner的项目单击事件
+id.onItemSelected=function(l,v,p,i) 
+项目=v.Text
+end
+
+--ExpandableListView的父项目与子项目单击事件
+id.onGroupClick=function(l,v,p,s)
+  print(v.Text..":GroupClick")
+end
+
+id.onChildClick=function(l,v,g,c)
+  print(v.Text..":ChildClick")
+end》》
+
+
+《《Shell执行》》
+《《function exec(cmd)
+local p=io.popen(string.format('%s',cmd))
+local s=p:read("*a")
+p:close()
+return s
+end
+
+print(exec("echo  ...."))
+
+部分常用命令:
+--删除文件或文件夹
+rm -r /路径
+
+--复制文件或文件夹
+cp -r inpath outpath
+
+--移动文件或文件夹
+mv -r inpath outpath
+
+--挂载系统目录
+mount -o remount,rw path
+
+--修改系统文件权限
+chmod 755 /system/build.prop
+
+--重启
+reboot  
+
+--关机
+reboot -p
+
+--重启至recovery
+reboot recovery》》
