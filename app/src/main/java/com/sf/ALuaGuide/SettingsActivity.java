@@ -14,10 +14,10 @@ import android.widget.Toast;
 
 public class SettingsActivity extends MyPreferenceActivity {
 
-    SwitchPreference nightMode;
-    SwitchPreference heightLight;
-    EditTextPreference delay;
-    Context context;
+    private SwitchPreference nightMode;
+    private SwitchPreference heightLight;
+    private EditTextPreference delay;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

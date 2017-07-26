@@ -62,17 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSwipeRefresh() {
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        if (sp.getBoolean("nightMode", false)) {
+            swipeRefresh.setColorSchemeResources(R.color.darkColorAccent);
+        } else {
+            swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        }
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefresh.setRefreshing(false);
             }
         });
-        if (sp.getBoolean("nightMode", false)) {
-            swipeRefresh.setColorSchemeResources(R.color.darkColorAccent);
-        } else {
-            swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        }
     }
 
     private void initTabs() {
