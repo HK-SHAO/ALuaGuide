@@ -1,10 +1,10 @@
 ALua手册
 
-![](https://i.loli.net/2017/07/27/5979ba177ba1b.png =200)
-![](https://i.loli.net/2017/07/27/5979ba164eb83.png =200)
-![](https://i.loli.net/2017/07/27/5979ba1902470.png =200)
-![](https://i.loli.net/2017/07/27/5979ba177cabe.png =200)
-![](https://i.loli.net/2017/07/27/5979ba1902fdd.png =200)
+![](https://i.loli.net/2017/07/27/5979ba177ba1b.png =200x)
+![](https://i.loli.net/2017/07/27/5979ba164eb83.png =200x)
+![](https://i.loli.net/2017/07/27/5979ba1902470.png =200x)
+![](https://i.loli.net/2017/07/27/5979ba177cabe.png =200x)
+![](https://i.loli.net/2017/07/27/5979ba1902fdd.png =200x)
 
 重生版ALua手册对比老版本新增了非常多的内容，并且使用了自己写的编辑器，内容比之前多了很多，并且纯手册，零权限，美观而又实用。
 
