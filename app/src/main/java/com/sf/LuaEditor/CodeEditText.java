@@ -20,9 +20,7 @@ public class CodeEditText extends ShaderEditor {
 
     public CodeEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         this.context = context;
-
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
         paint.setTypeface(Typeface.MONOSPACE);

@@ -83,11 +83,6 @@ public class ShaderEditor extends android.support.v7.widget.AppCompatEditText {
     private int tabWidth = 0;
     private Context context;
 
-    public ShaderEditor(Context context) {
-        super(context);
-        init(context);
-    }
-
     public ShaderEditor(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
@@ -121,7 +116,6 @@ public class ShaderEditor extends android.support.v7.widget.AppCompatEditText {
 
     private void init(Context context) {
         this.context = context;
-
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         if (sp.getBoolean("nightMode", false)) {
             setTextColor(Color.parseColor("#e0e0e0"));

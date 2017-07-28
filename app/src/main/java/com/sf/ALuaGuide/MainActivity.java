@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (!sp.getBoolean("nightMode", false)) {
+            toolbar.setPopupTheme(R.style.AppTheme_PopupOverlay);
+        }
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = (TabLayout) findViewById(R.id.main_tabs);
         tabs.setupWithViewPager(viewPager);
         tabs.getTabAt(0).setText("教程");
-        tabs.getTabAt(1).setText("代码");
+        tabs.getTabAt(1).setText("更多");
     }
 
     private void initRecyclerView() {

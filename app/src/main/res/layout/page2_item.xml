@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="end"
             android:src="@drawable/ic_book" />
 
@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="end"
+            android:textSize="12sp"
             android:textColor="#616161"
             android:typeface="monospace" />
 
