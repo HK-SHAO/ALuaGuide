@@ -97,7 +97,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     if (data.title.equals("Lua参考手册")) {
-                        LuaManualActivity.actionStart(v.getContext());
+                        WebViewActivity.actionStart(v.getContext(),"file:///android_asset/LuaManual/manual.html");
                         return;
                     }
                     ShowActivity.actionStart(v.getContext(), data.title);

@@ -138,15 +138,15 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Data> getPageData() {
         List<Data> list = new ArrayList<>();
-        list.add(new Data("Lua参考手册", "———由菜鸟教程提供"));
-        list.add(new Data("AndroLua帮助", "———由nirenr提供"));
-        list.add(new Data("实用代码", "———由寒歌提供"));
-        list.add(new Data("网络操作", "———由寒歌提供"));
-        list.add(new Data("文件操作", "———由寒歌提供"));
-        list.add(new Data("用户界面", "———由寒歌提供"));
-        list.add(new Data("基础代码", "———由寒歌提供"));
-        list.add(new Data("Intent类", "———由寒歌提供"));
-        list.add(new Data("笔记", "———由烧风提供"));
+        list.add(new Data("Lua参考手册", "———菜鸟教程提供"));
+        list.add(new Data("AndroLua帮助", "———nirenr提供"));
+        list.add(new Data("实用代码", "———寒歌提供"));
+        list.add(new Data("网络操作", "———寒歌提供"));
+        list.add(new Data("文件操作", "———寒歌提供"));
+        list.add(new Data("用户界面", "———寒歌提供"));
+        list.add(new Data("基础代码", "———寒歌提供"));
+        list.add(new Data("Intent类", "———寒歌提供"));
+        list.add(new Data("笔记", "———烧风提供"));
         return list;
     }
 

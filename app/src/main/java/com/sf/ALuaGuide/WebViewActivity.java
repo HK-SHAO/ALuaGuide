@@ -6,13 +6,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class LuaManualActivity extends MySwipeBackActivity {
 
+public class WebViewActivity extends MySwipeBackActivity {
 
     private WebView webView;
 
@@ -35,26 +34,14 @@ public class LuaManualActivity extends MySwipeBackActivity {
         settings.setLoadWithOverviewMode(true);
         settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);
-        webView.loadUrl("file:///android_asset/LuaManual/manual.html");
+        webView.loadUrl(getIntent().getStringExtra("url"));
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+                actionStart(WebViewActivity.this, url);
                 return true;
             }
         });
-    }
-
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (webView.canGoBack()) {
-                webView.goBack();
-                return true;
-            } else {
-                scrollToFinishActivity();
-            }
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void setupActionBar() {
@@ -62,8 +49,9 @@ public class LuaManualActivity extends MySwipeBackActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    public static void actionStart(Context context) {
-        Intent intent = new Intent(context, LuaManualActivity.class);
+    public static void actionStart(Context context, String url) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra("url", url);
         context.startActivity(intent);
     }
 

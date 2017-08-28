@@ -3,7 +3,6 @@ package com.sf.ALuaGuide;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.KeyEvent;
@@ -49,7 +48,7 @@ public abstract class MyPreferenceActivity extends PreferenceActivity implements
     }
 
     @Override
-    public void setContentView(@LayoutRes int layoutResID) {
+    public void setContentView(int layoutResID) {
         getDelegate().setContentView(layoutResID);
     }
 

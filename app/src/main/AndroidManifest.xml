@@ -30,7 +30,7 @@
             android:name=".ShowActivity"
             android:theme="@style/AppTheme.SwipeBack" />
         <activity
-            android:name=".LuaManualActivity"
+            android:name=".WebViewActivity"
             android:label="Lua参考手册" />
     </application>
 
