@@ -7,8 +7,8 @@ android {
         applicationId "com.sf.ALuaGuide"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 8
-        versionName "0.8"
+        versionCode 9
+        versionName "0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resConfigs "cn"
